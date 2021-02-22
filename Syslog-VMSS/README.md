@@ -15,6 +15,6 @@ The ARM template will deploy everything needed:
 The ARM template includes the cloud init files which runs commands on the VM instance when it is deployed.
 
 ## Deploy Unbuntu VMSS
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/Syslog-VMSS/Syslog-VMSS-ub-Template.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw%2Egithubusercontent%2Ecom%2FPUNCH%2DCyber%2FAzure%2DPublic%2Fmain%2FSyslog%2DVMSS%2FSyslog%2DVMSS%2Dub%2DTemplate%2Ejson" target="_blank">
     <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
