@@ -113,7 +113,7 @@
                 "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_Name'))]"
             ],
             "properties": {
-                "protocol": "TCP",
+                "protocol": "*",
                 "sourcePortRange": "*",
                 "destinationPortRange": "514",
                 "sourceAddressPrefix": "*",
