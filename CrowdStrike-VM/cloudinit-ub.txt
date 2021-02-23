@@ -12,7 +12,7 @@ runcmd:
   - sudo systemctl start cs.falconhoseclientd.service
   - sudo wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w <WORKSPACEID> -s <WORKSPACEKEY>
   - sudo wget -O TimeGenerated.py https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/DataConnectors/CEF/TimeGenerated.py && python TimeGenerated.py <WORKSPACEID>
-  - wget -O /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike/crowdstrike_read_log.sh https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/CrowdStrike-VM/crowdstrike_read_log.sh
-  - wget -O /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike_json.conf https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/CrowdStrike-VM/crowdstrike_json.conf
+  - sudo wget -O /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike/crowdstrike_read_log.sh https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/CrowdStrike-VM/crowdstrike_read_log.sh
+  - sudo wget -O /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike_json.conf https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/CrowdStrike-VM/crowdstrike_json.conf
   - sudo sed -i -e 's@OMSGENTSID@<WorkspaceID>@g' /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike_json.conf
   - sudo /opt/microsoft/omsagent/bin/service_control restart <WORKSPACEID>
