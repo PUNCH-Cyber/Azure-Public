@@ -1,6 +1,8 @@
-PREV_LINE_STAT=/etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike/prev_last_line.tmp
+#!/bin/bash
+
+PREV_LINE_STAT=/var/log/crowdstrike/falconhoseclient/prev_last_line.tmp
 LOG=/var/log/crowdstrike/falconhoseclient/output
-CURL_LOG=/etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike/curl_output
+CURL_LOG=/var/log/crowdstrike/falconhoseclient/curl_output
 LINE=$(cat $LOG | wc -l)
 
 if [ -f $PREV_LINE_STAT ]
