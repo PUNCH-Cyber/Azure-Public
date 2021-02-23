@@ -1,10 +1,6 @@
 #cloud-config
 runcmd:
   - sudo apt update && apt upgrade -y
-  - sudo echo \"root         soft    nofile         65536\" >> /etc/security/limits.conf
-  - sudo echo \"root         hard    nofile         65536\" >> /etc/security/limits.conf
-  - sudo echo \"*         soft    nofile         65536\" >> /etc/security/limits.conf
-  - sudo echo \"*         hard    nofile         65536\" >> /etc/security/limits.conf
   - sudo wget https://github.com/PUNCH-Cyber/Azure-Public/raw/main/CrowdStrike-VM/CS-SIEM-Tool-24.deb
   - sudo dpkg -i CS-SIEM-Tool-24.deb
   - sudo sed -i -e 's/client_id =/client_id = <CS-Client-ID>/g' /opt/crowdstrike/etc/cs.falconhoseclient.cfg
