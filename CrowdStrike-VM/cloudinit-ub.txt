@@ -7,8 +7,8 @@ runcmd:
   - sudo echo \"*         hard    nofile         65536\" >> /etc/security/limits.conf
   - sudo wget https://github.com/PUNCH-Cyber/Azure-Public/raw/main/CrowdStrike-VM/CS-SIEM-Tool-24.deb
   - sudo dpkg -i CS-SIEM-Tool-24.deb
-  - sudo sed -i -e 's@client_id  = @client_id = <API_CLIENT_ID>@g' /opt/crowdstrike/etc/cs.falconhoseclient.cfg
-  - sudo sed -i -e 's@client_secret = @client_secret = <API_CLIENT_SECRET>@g' /opt/crowdstrike/etc/cs.falconhoseclient.cfg
+  - sudo sed -i -e 's/client_id =/client_id = <CS-Client-ID>/g' /opt/crowdstrike/etc/cs.falconhoseclient.cfg
+  - sudo sed -i -e 's/client_secret =/client_secret = <API_CLIENT_SECRET>/g' /opt/crowdstrike/etc/cs.falconhoseclient.cfg
   - sudo systemctl start cs.falconhoseclientd.service
   - sudo wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w <WORKSPACEID> -s <WORKSPACEKEY>
   - sudo wget -O TimeGenerated.py https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/DataConnectors/CEF/TimeGenerated.py && python TimeGenerated.py <WORKSPACEID>
