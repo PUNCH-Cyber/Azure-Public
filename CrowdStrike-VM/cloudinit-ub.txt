@@ -16,4 +16,8 @@ runcmd:
   - sudo wget -O /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike/crowdstrike_read_log.sh https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/CrowdStrike-VM/crowdstrike_read_log.sh
   - sudo wget -O /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike_json.conf https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/CrowdStrike-VM/crowdstrike_json.conf
   - sudo sed -i -e 's/OMSGENTSID/<WorkspaceID>/g' /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike_json.conf
+  - sudo chown -R omsagent.omiusers /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike/crowdstrike_read_log.sh
+  - sudo chown omsagent.omiusers /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike_json.conf
+  - sudo chown -R omsagent.omiusers /var/log/crowdstrike/falconhoseclient
+  - sudo chmod 740 /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike/crowdstrike_read_log.sh
   - sudo /opt/microsoft/omsagent/bin/service_control restart <WORKSPACEID>
