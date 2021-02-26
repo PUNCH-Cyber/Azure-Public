@@ -21,7 +21,7 @@ fi
 
 # ENGINE
 tail -n $LINE_RANGE $LOG > $CURL_LOG
-curl file://localhost/$CURL_LOG
+#curl file://localhost/$CURL_LOG
 
 #echo "LINE = $LINE"
 #echo "LINE_RANGE is $LINE_RANGE"
