@@ -175,7 +175,7 @@
                 "label": "Other Log Collectors",
                 "elements": [
                     {
-                        "name": "textBlock1",
+                        "name": "textBlock2",
                         "type": "Microsoft.Common.TextBlock",
                         "visible": true,
                         "options": {
@@ -216,9 +216,9 @@
                         "visible": true
                     },
 					{
-                        "name": "textBlock2",
+                        "name": "textBlock3",
                         "type": "Microsoft.Common.TextBlock",
-                        "visible": true,
+                        "visible": "[if(or(contains(steps('thridParty').enableCSDeployment),contains(steps('thridParty').enableQualysDeployment)),true, false)]",
                         "options": {
                             "text": "Virtual Machine deployment information:"
                         }
@@ -253,9 +253,9 @@
                         "visible": "[if(or(contains(steps('thridParty').enableCSDeployment),contains(steps('thridParty').enableQualysDeployment)),true, false)]"
                     },
 					{
-                        "name": "textBlock3",
+                        "name": "textBlock4",
                         "type": "Microsoft.Common.TextBlock",
-                        "visible": true,
+                        "visible": "[if(contains(steps('thridParty').enableCSDeployment), true, false)]",
                         "options": {
                             "text": "CrowdStrike deployment information:"
                         }
@@ -289,9 +289,9 @@
                         "visible": "[if(contains(steps('thridParty').enableCSDeployment), true, false)]"
                     },
 					{
-                        "name": "textBlock4",
+                        "name": "textBlock5",
                         "type": "Microsoft.Common.TextBlock",
-                        "visible": true,
+                        "visible": "[if(contains(steps('thridParty').enableQualysDeployment), true, false)]",
                         "options": {
                             "text": "Qualys deployment information"
                         }
