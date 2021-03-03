@@ -27,7 +27,7 @@
                 "toolTip": "The Customer name should include 4-63 letters, digits or '-'. The '-' shouldn't be the first or the last symbol.",
                 "constraints": {
                     "required": true,
-                    "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                    "regex": "^[A-Za-z0-9]{1,30}$",
                     "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
                 },
                 "visible": true
