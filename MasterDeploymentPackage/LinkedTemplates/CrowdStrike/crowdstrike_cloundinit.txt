@@ -1,0 +1,23 @@
+#cloud-config
+runcmd:
+  - sudo apt update && apt upgrade -y
+  - sudo wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w <Workspace ID> -s <Workspace Key>
+  - sudo mkdir /etc/opt/microsoft/omsagent/</conf/omsagent.d/crowdstrike
+  - sudo wget -O /etc/opt/microsoft/omsagent/<Workspace ID>/conf/omsagent.d/crowdstrike/crowdstrike_read_log.sh https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/CrowdStrike-VM/crowdstrike_read_log.sh
+  - sudo wget -O /etc/opt/microsoft/omsagent/<Workspace ID>/conf/omsagent.d/crowdstrike_json.conf https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/CrowdStrike-VM/crowdstrike_json.conf
+  - sudo sed -i -e 's/OMSGENTSID/<Workspace ID>/g' /etc/opt/microsoft/omsagent/<Workspace ID>/conf/omsagent.d/crowdstrike_json.conf
+  - sudo chown -R omsagent.omiusers /etc/opt/microsoft/omsagent/<Workspace ID>/conf/omsagent.d/crowdstrike
+  - sudo chown omsagent.omiusers /etc/opt/microsoft/omsagent/<Workspace ID>/conf/omsagent.d/crowdstrike_json.conf
+  - sudo chmod 740 /etc/opt/microsoft/omsagent/<Workspace ID>/conf/omsagent.d/crowdstrike/crowdstrike_read_log.sh
+  - sudo wget https://github.com/PUNCH-Cyber/Azure-Public/raw/main/CrowdStrike-VM/CS-SIEM-Tool-24.deb
+  - sudo dpkg -i CS-SIEM-Tool-24.deb
+  - sudo systemctl stop cs.falconhoseclientd.service
+  - sudo sed -i -e 's/client_id =/client_id = <CrowdStrike API ID>/g' /opt/crowdstrike/etc/cs.falconhoseclient.cfg
+  - sudo sed -i -e 's/client_secret =/client_secret = <CrowdStrike API Secret>/g' /opt/crowdstrike/etc/cs.falconhoseclient.cfg
+  - sudo groupadd csoms-group
+  - sudo usermod -a -G csoms-group daemon 
+  - sudo usermod -a -G csoms-group omsagent
+  - sudo chgrp -R csoms-group /var/log/crowdstrike/falconhoseclient
+  - sudo chmod g+rw /var/log/crowdstrike/falconhoseclient
+  - sudo systemctl restart omsagent-<WorkspaceID>.service
+  - sudo systemctl start cs.falconhoseclientd.service

@@ -1,0 +1,238 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "customerName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name for the Virtual Machine."
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        },
+        "VMAdminUserName": {
+            "type": "string",
+            "metadata": {
+                "description": "Username for the Virtual Machine."
+            }
+        },
+        "VMAdminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Password for the Virtual Machine."
+            }
+        },
+        "workspaceIDOutput": {
+            "type": "string",
+            "defaultValue": null,
+            "metadata": {
+                "description": "The Log Analytics or Azure Sentinel workspace ID"
+            }
+        },
+        "workspaceKeyOutput": {
+            "type": "securestring",
+            "defaultValue": null,
+            "metadata": {
+                "description": "The Log Analytics or Azure Sentinel workspace key"
+            }
+        }
+    },
+    "variables": {
+        "vm_Name": "[concat(parameter('customerName'), '-CrowdStrike-VM",
+        "storage_name": "[tolower(concat(parameters('customerName'), 'csvmdiag'))]",
+        "nic_Name": "[concat(parameters('customerName'), '-CrowdStrike-NIC')]",
+        "nsg_Name": "[concat(parameters('customerName'),'-CrowdStrike-NSG')]",
+        "vnet_Name": "[concat(parameters('customerName'), '-CrowdStrike-VNet')]",
+        "pip_Name": "[concat(parameters('customerName'),'CrowdStrike-PIP')]",
+        "cloudinit": "[concat(#cloud-config\nruncmd:\n  - sudo apt update && apt upgrade -y\n  - sudo wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w <WorkspaceID> -s ', parameters('workspaceKey'), '\n  - sudo mkdir /etc/opt/microsoft/omsagent/<WorkspaceID>/conf/omsagent.d/crowdstrike\n  - sudo wget -O /etc/opt/microsoft/omsagent/<WorkspaceID>/conf/omsagent.d/crowdstrike/crowdstrike_read_log.sh https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/CrowdStrike-VM/crowdstrike_read_log.sh\n  - sudo wget -O /etc/opt/microsoft/omsagent/<WorkspaceID>/conf/omsagent.d/crowdstrike_json.conf https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/CrowdStrike-VM/crowdstrike_json.conf\n  - sudo sed -i -e 's/OMSGENTSID/<WorkspaceID>/g' /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike_json.conf\n  - sudo chown -R omsagent.omiusers /etc/opt/microsoft/omsagent/<WorkspaceID>/conf/omsagent.d/crowdstrike\n  - sudo chown omsagent.omiusers /etc/opt/microsoft/omsagent/<WorkspaceID>/conf/omsagent.d/crowdstrike_json.conf\n  - sudo chmod 740 /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike/crowdstrike_read_log.sh\n  - sudo wget https://github.com/PUNCH-Cyber/Azure-Public/raw/main/CrowdStrike-VM/CS-SIEM-Tool-24.deb\n  - sudo dpkg -i CS-SIEM-Tool-24.deb\n  - sudo systemctl stop cs.falconhoseclientd.service\n  - sudo sed -i -e 's/client_id =/client_id = ', parameters('crowdstrikeId'), '/g' /opt/crowdstrike/etc/cs.falconhoseclient.cfg\n  - sudo sed -i -e 's/client_secret =/client_secret = ', parameters('crowdstrikeSecret'), '/g' /opt/crowdstrike/etc/cs.falconhoseclient.cfg\n  - sudo groupadd csoms-group\n  - sudo usermod -a -G csoms-group daemon \n  - sudo usermod -a -G csoms-group omsagent\n  - sudo chgrp -R csoms-group /var/log/crowdstrike/falconhoseclient\n  - sudo chmod g+rw /var/log/crowdstrike/falconhoseclient\n  - sudo systemctl restart omsagent-<WorkspaceID>.service\n  - sudo systemctl start cs.falconhoseclientd.service)]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2020-05-01",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[variables('pip_Name')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "dnsSettings": {
+                    "domainNameLabel": "[tolower(concat(parameters('customerName'), 'crowdstrikevm'))]",
+                    "fqdn": "[tolower(concat(parameters('customerName'), 'crowdstrikevm','.',resourceGroup().location,'.cloudapp.azure.com'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2019-09-01",
+            "name": "[variables('nsg_Name')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "Allow-CrowdStrike",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1000,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [
+                            ],
+                            "destinationPortRanges": [
+                            ],
+                            "sourceAddressPrefixes": [
+                            ],
+                            "destinationAddressPrefixes": [
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2019-11-01",
+            "name": "[variables('vnet_Name')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_Name'))]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_Name'))]"
+                            },
+                            "serviceEndpoints": [
+                            ],
+                            "delegations": [
+                            ],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [
+                ],
+                "enableDdosProtection": false,
+                "enableVmProtection": false
+            }
+        },
+        {
+            "apiVersion": "2020-05-01",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[variables('nic_Name')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses/', variables('pip_Name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/', variables('vnet_Name'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('pip_Name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet_Name'), '/default')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "2020-06-01",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('vm_Name')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces/', variables('nic_Name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_F4s_v2"
+                },
+                "osProfile": {
+                    "computerNamePrefix": "[parameters('customerName')]",
+                    "adminUsername": "[parameters('VMAdminUserName')]",
+                    "adminPassword": "[parameters('VMAdminPassword')]",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "provisionVMAgent": true
+                    },
+                    "secrets": [
+                    ],
+                    "customData": "[base64(variables('cloudinit'))]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "18.04-LTS",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS"
+                        },
+                        "diskSizeGB": 64
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic_Name'))]"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "<parentVmResource>/OMSExtension",
+            "apiVersion": "2018-06-01",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vm_Name'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                "type": "OmsAgentForLinux",
+                "typeHandlerVersion": "1.4",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "workspaceId": "[parameters('workspaceIDOutput')]",
+                    "stopOnMultipleConnections": "true"
+                },
+                "protectedSettings": {
+                    "workspaceKey": "[parameters('workspaceKeyOutput')]"
+                }
+            }
+        }
+    ]
+}

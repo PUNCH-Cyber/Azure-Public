@@ -1,0 +1,413 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+    "handler": "Microsoft.Azure.CreateUIDef",
+    "version": "0.1.2-preview",
+    "parameters": {
+        "config": {
+            "isWizard": true,
+            "basics": {
+                "description": "**Providence Secure Customer Onboarding Deployment**",
+                "resourceGroup": {
+                    "constraints": {
+                        "validations": [
+                            {
+                                "isValid": "^[0-9a-zA-Z]{1,40}-Sentinel$",
+                                "message": "This Resource Group should follow this convention, Customer-Sentinel."
+                            }
+                        ]
+                    }
+                },
+                "location": {
+                    "label": "Location",
+                    "toolTip": "Location for all resources",
+                    "resourceTypes": [
+                        "Microsoft.OperationalInsights"
+                    ]
+                }
+            }
+        },
+        "basics": [
+            {
+                "name": "customerName",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Customer Name",
+                "placeholder": "",
+                "defaultValue": "",
+                "toolTip": "This is the name of the customer being on-boarded.",
+                "constraints": {
+                    "required": true,
+                    "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                    "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                },
+                "visible": true
+            },
+            {
+                "name": "dailyQuota",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Daily ingestion limit in GBs. Enter 0 for no limit.",
+                "placeholder": "",
+                "defaultValue": "0",
+                "toolTip": "This limit doesn't apply to the following tables: SecurityAlert, SecurityBaseline, SecurityBaselineSummary, SecurityDetection, SecurityEvent, WindowsFirewall, MaliciousIPCommunication, LinuxAuditLog, SysmonEvent, ProtectionStatus, WindowsEvent",
+                "constraints": {
+                    "required": true,
+                    "regex": "^[0-9]{1,4}$",
+                    "validationMessage": "Only numbers allowed, and the value must be 1-4 characters long."
+                },
+                "visible": true
+            },
+            {
+                "name": "dataRetention",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Number of days of retention, Default is 90 days.",
+                "placeholder": "",
+                "defaultValue": "90",
+                "toolTip": "Only numbers allowed",
+                "constraints": {
+                    "required": true,
+                    "regex": "([3-8][0-9]|9[0-9]|[1-6][0-9]{2}|7[0-2][0-9]|730)",
+                    "validationMessage": "Retention must be between 30 and 730 days."
+                },
+                "visible": true
+            }
+        ],
+        "steps": [
+            {
+                "name": "microsoftDataConnectors",
+                "label": "Microsoft Data Connectors",
+                "elements": [
+                    {
+                        "name": "textBlock1",
+                        "type": "Microsoft.Common.TextBlock",
+                        "visible": true,
+                        "options": {
+                            "text": "Please select which Microsoft connectors you want to onboard into your Azure Sentinel environment, This is not required since this is intented for internal monitoring.",
+                            "link": {
+                                "label": "Learn more",
+                                "uri": "https://www.microsoft.com"
+                            }
+                        }
+                    },
+                    {
+                        "name": "enableMicrosoftDataConnectorsKind",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Select Microsoft data connectors to onboard",
+                        "placeholder": "",
+                        "multiselect": true,
+                        "defaultValue": "o365",
+                        "toolTip": "Select the Microsoft data connectors that you would like to enable (Not Required)",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "Office365",
+                                    "value": "Office365"
+                                },
+                                {
+                                    "label": "Azure ATP",
+                                    "value": "AzureAdvancedThreatProtection"
+                                },
+                                {
+                                    "label": "Azure AD Identity Protection",
+                                    "value": "AzureActiveDirectory"
+                                },
+                                {
+                                    "label": "Microsoft Defender ATP",
+                                    "value": "MicrosoftDefenderAdvancedThreatProtection"
+                                },
+                                {
+                                    "label": "Azure Security Center",
+                                    "value": "AzureSecurityCenter"
+                                },
+                                {
+                                    "label": "Microsoft Cloud App Security",
+                                    "value": "MicrosoftCloudAppSecurity"
+                                },
+                                {
+                                    "label": "Azure Activity",
+                                    "value": "AzureActivity"
+                                },
+                                {
+                                    "label": "Security Events",
+                                    "value": "SecurityEvents"
+                                },
+                                {
+                                    "label": "Windows Firewall",
+                                    "value": "WindowsFirewall"
+                                },
+                                {
+                                    "label": "DNS Analytics",
+                                    "value": "DNS"
+                                }
+                            ],
+                            "required": false
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "mcasDiscoveryLogs",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Enable MCAS Discovery Logs?",
+                        "toolTip": "Select to bring MCAS discovery logs into Sentinel. These logs are billed.",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Please select"
+                        },
+                        "visible": "[if(contains(steps('dataConnectors').enableDataConnectorsKind,'MicrosoftCloudAppSecurity'), true, false)]"
+                    },
+                    {
+                        "name": "securityCollectionTier",
+                        "type": "Microsoft.Common.OptionsGroup",
+                        "label": "Windows Security Events to stream into Sentinel ",
+                        "defaultValue": "Recommended",
+                        "toolTip": "",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "All",
+                                    "value": "All"
+                                },
+                                {
+                                    "label": "Common",
+                                    "value": "Recommended"
+                                },
+                                {
+                                    "label": "Minimal",
+                                    "value": "Minimal"
+                                }
+                            ],
+                            "required": false
+                        },
+                        "visible": "[if(contains(steps('dataConnectors').enableDataConnectorsKind,'SecurityEvents'), true, false)]"
+                    }
+                ]
+            },
+            {
+                "name": "thirdParty",
+                "label": "Other Log Collectors",
+                "elements": [
+                    {
+                        "name": "textBlock1",
+                        "type": "Microsoft.Common.TextBlock",
+                        "visible": true,
+                        "options": {
+                            "text": "Please select which additional connectors you want to onboard into your Azure Sentinel environment."
+                        }
+                    },
+					{
+                        "name": "enableSyslogDeployment",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Deploy Syslog/CEF log collector?",
+                        "toolTip": "This will deploy a Virtual Machine Scaling Set to collect logs and stream them into Senitnel",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Please select"
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "enableQualysDeployment",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Deploy QualysVM log collector?",
+                        "toolTip": "Select to enable the deployment of the QualysVM log collection.",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Enables Qualys Vulnerability Management platform."
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "enableCSDeployment",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Deploy CrowdStrikeEDR log collector?",
+                        "toolTip": "This will deploy a single VM to collect streaming events from the CrowdStrike platform.",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Enables CrowdStrike platform"
+                        },
+                        "visible": true
+                    },
+					{
+                        "name": "textBlock2",
+                        "type": "Microsoft.Common.TextBlock",
+                        "visible": "[if(or(contains(steps('thridParty').enableCSDeployment),contains(steps('thridParty').enableQualysDeployment)),true, false)]",
+                        "options": {
+                            "text": "Virtual Machine deployment information:"
+                        }
+                    },
+                    {
+                        "name": "VMAdminUserName",
+                        "type": "Microsoft.Compute.UserNameTextBox",
+                        "label": "VM Admin UserName",
+                        "defaultValue": "",
+						"osPlatform": "Linux",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[a-z0-9A-Z]{1,30}$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "toolTip": "This is the Username for the VM(SS) deployment",
+                        "visible": "[if(or(contains(steps('thridParty').enableCSDeployment),contains(steps('thridParty').enableQualysDeployment)),true, false)]"
+                    },
+                    {
+                        "name": "VMAdminPassword",
+                        "type": "Microsoft.Common.PasswordBox",
+                        "label": {
+                            "password": "VM Admin Password",
+                            "confirmPassword": "Confirm password"
+                        },
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[a-zA-Z0-9]{8,}$",
+                            "validationMessage": "Password must be at least 8 characters long, contain only numbers and letters"
+                        },
+                        "toolTip": "This is the Password for the VM(SS) deployment",
+                        "visible": "[if(or(contains(steps('thridParty').enableCSDeployment),contains(steps('thridParty').enableQualysDeployment)),true, false)]"
+                    },
+					{
+                        "name": "textBlock3",
+                        "type": "Microsoft.Common.TextBlock",
+                        "visible": "[if(or(contains(steps('thridParty').enableCSDeployment),contains(steps('thridParty').enableQualysDeployment)),true, false)]",
+                        "options": {
+                            "text": "CrowdStrike deployment information:"
+                        }
+                    },
+                    {
+                        "name": "crowdstrikeClientID",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "CrowdStrike API Client ID",
+                        "placeholder": "",
+                        "defaultValue": "",
+                        "toolTip": "This is from the CS 'API and Integrations' menu within CS.",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "visible": "[if(or(contains(steps('thridParty').enableCSDeployment), true, false)]"
+                    },
+                    {
+                        "name": "crowdstrikeClientKey",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "CrowdStrike API Client Key",
+                        "placeholder": "",
+                        "defaultValue": "",
+                        "toolTip": "This is the password for the Qualys account",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "visible": "[if(contains(steps('thridParty').enableCSDeployment), true, false)]"
+                    },
+					{
+                        "name": "textBlock4",
+                        "type": "Microsoft.Common.TextBlock",
+                        "visible": "[if(contains(steps('thridParty').enableQualysDeployment), true, false)]",
+                        "options": {
+                            "text": "Qualys deployment information"
+                        }
+                    },
+                    {
+                        "name": "qualysUser",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Qualys Username (API access enabled)",
+                        "placeholder": "",
+                        "defaultValue": "",
+                        "toolTip": "This account username must be granted access to the API platform to work",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "visible": "[if(contains(steps('thridParty').enableQualysDeployment), true, false)]"
+                    },
+                    {
+                        "name": "qualysPass",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Qualys Password",
+                        "placeholder": "",
+                        "defaultValue": "",
+                        "toolTip": "This is the password for the Qualys account",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "visible": "[if(contains(steps('thridParty').enableQualysDeployment), true, false)]"
+                    }
+                ]
+            },
+            {
+                "name": "analyticsRules",
+                "label": "Analytics Rules",
+                "elements": [
+                    {
+                        "name": "enableFusionAlert",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Enable Fusion alert rule?",
+                        "toolTip": "Select to enable Fusion analyttic rule. Details here: https://docs.microsoft.com/azure/sentinel/fusion",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Please select"
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "enableMicrosoftAlerts",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Enable Microsoft alert rules for selected connectors?",
+                        "toolTip": "Select to enable Microsoft rules for the connectors you selected in the previous step.",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Enables rules coming from selected Microsoft security products"
+                        },
+                        "visible": "[if(or(contains(steps('dataConnectors').enableDataConnectorsKind,'AzureAdvancedThreatProtection'),contains(steps('dataConnectors').enableDataConnectorsKind,'AzureActiveDirectoryIdentityProtection'),contains(steps('dataConnectors').enableDataConnectorsKind,'MicrosoftDefenderAdvancedThreatProtection'),contains(steps('dataConnectors').enableDataConnectorsKind,'AzureSecurityCenter'),contains(steps('dataConnectors').enableDataConnectorsKind,'MicrosoftCloudAppSecurity')), true, false)]"
+                    },
+                    {
+                        "name": "enableMLAlerts",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Enable ML Behavior Analytics alert rules?",
+                        "toolTip": "Select to enable ML Behavior Analytics rules for selected connectors (SecurityEvents and/or Syslog)",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Enables SSH and/or RDP anomalous login alerts"
+                        },
+                        "visible": "[if(or(contains(steps('dataConnectors').enableDataConnectorsKind,'Syslog'),contains(steps('dataConnectors').enableDataConnectorsKind,'SecurityEvents')), true, false)]"
+                    },
+                    {
+                        "name": "enableScheduledAlerts",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Enable Scheduled alert rules for selected connectors?",
+                        "toolTip": "Select to enable scheduled analytics rules for selected connectors",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Enables Scheduled rules matching any of the selected connectors"
+                        },
+                        "visible": true
+                    }
+                ]
+            }
+        ],
+        "outputs": {
+            "customerName": "[basics('customerName')]",
+            "dailyQuota": "[basics('dailyQuota')]",
+            "dataRetention": "[basics('dataRetention')]",
+            "enableDataConnectorsKind": "[steps('dataConnectors').enableDataConnectorsKind]",
+            "securityCollectionTier": "[steps('dataConnectors').securityCollectionTier]",
+            "mcasDiscoveryLogs": "[steps('dataConnectors').mcasDiscoveryLogs]",
+            "location": "[location()]",
+            "enableSyslog": "[steps('thridParty').enableSyslogDeployment]",
+            "enableQualysDeployment": "[steps('thridParty').enableQualysDeployment]",
+            "enableCSDeployment": "[steps('thridParty').enableCSDeployment]",
+            "VMAdminUserName": "[steps('thridParty').VMAdminUserName]",
+            "VMAdminPassword": "[steps('thridParty').VMAdminPassword]",
+            "qualysUser": "[steps('thridParty').qualysUser]",
+            "qualysPass": "[steps('thridParty').qualysPass]",
+            "CSAPIID": "[steps('thridParty').crowdstrikeClientID]",
+            "CSAPIKEY": "[steps('thridParty').crowdstrikeClientKey]",
+            "enableFusionAlert": "[steps('analyticsRules').enableFusionAlert]",
+            "enableMicrosoftAlerts": "[steps('analyticsRules').enableMicrosoftAlerts]",
+            "enableMLAlerts": "[steps('analyticsRules').enableMLAlerts]", 
+            "enableScheduledAlerts": "[steps('analyticsRules').enableScheduledAlerts]"
+        }
+    }
+}

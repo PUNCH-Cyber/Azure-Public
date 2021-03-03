@@ -1,0 +1,80 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "WorkspaceIDOutput": {
+            "type": "string",
+              "minLength": 36,
+              "maxLength": 36,
+              "defaultValue": null,
+            "metadata": {
+                "description": "The Log Analytics or Azure Sentinel workspaces where the Qualys VM logs will be ingested"
+            }
+        },
+        "WorkspaceKeyOutput": {
+            "type": "securestring",
+            "minLength": 88,
+            "maxLength": 88,
+            "defaultValue": null,
+            "metadata": {
+                "description": "The Log Analytics or Azure Sentinel workspace key"
+            }
+        },
+        "QualysInstanceURL": {
+            "type": "string",
+            "defaultValue": null,
+            "metadata": {
+                "description": "The Qualys instance URL"
+            }
+        },
+        "qualysUser": {
+            "type": "securestring",
+            "defaultValue": null,           
+            "metadata": {
+                "description": "The Qualys Account Username"
+            }
+        },
+        "qualysPass": {
+            "type": "securestring",
+            "defaultValue": null,           
+            "metadata": {
+                "description": "The Qualys Account Password"
+            }
+        },
+        "customerName": {
+            "type": "string"
+        },
+        "sentinelTableName": {
+            "type": "string",
+            "defaultValue": "QualysVM",
+            "metadata": {
+                "description": "The name given to the data table in Azure Sentinel"
+            }
+        }
+    },
+    "variables": {
+        "authinfo" : "[base64(concat(parameters('QualysUsername'),':',parameters('QualysPassword')))]",
+        "integrationName": "[toLower(concat(parameters('customerName'),'-SentinelIntegration'))]"
+    },
+    "resources": [
+      {
+            "type": "Microsoft.Resources/deploymentScripts",
+            "apiVersion": "2020-10-01",
+            "name": "Qualys_Sentinel_IntegrationScript",
+            "location": "[resourceGroup().location]",
+            "kind": "AzurePowerShell",
+            "properties": {
+                "forceUpdateTag": "1",
+                "azPowerShellVersion": "3.0",
+                "arguments": "[format('-workspaceId {0} -workspaceKey {1} -qualysInstanceURL {2} -qualysAuthInfo {3} -integrationName {4} -sentinelTableName {5}', parameters('WorkspaceIDOutput'), parameters('WorkspaceKeyOutput'), parameters('QualysInstanceURL'), variables('authinfo'), parameters('integrationName'), parameters('SentinelTableName'))]",
+                "primaryScriptURI": "https://raw.githubusercontent.com/PUNCH-Cyber/Azure/master/ARM%20Templates/qualysvm_sentinel_integration/qualys_addsentinelintegration.ps1?token=ARHDQO42RXVZ4MAY45U2W33AH4EHC",
+                "supportingScriptUris": [],
+                "timeout": "PT30M",
+                "cleanupPreference": "Always",
+                "retentionInterval": "P1D"
+            }
+        }
+    ],
+    "outputs": {},
+    "functions": []
+  } 
