@@ -203,9 +203,6 @@
             "name": "[parameters('customerName')]",
             "type": "Microsoft.OperationalInsights/workspaces",
             "apiVersion": "2015-11-01-preview",
-            "dependsOn": [
-                "[resourceId('Microsoft.OperationsManagement/solutions/deployResourceGroups')]"
-            ],
             "location": "[parameters('location')]",
             "properties": {
                 "retentionInDays": "[parameters('dataRetention')]",
