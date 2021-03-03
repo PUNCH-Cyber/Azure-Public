@@ -218,7 +218,7 @@
 					{
                         "name": "textBlock3",
                         "type": "Microsoft.Common.TextBlock",
-                        "visible": "[if(or(contains(steps('thridParty').enableCSDeployment)),contains(steps('thridParty').enableQualysDeployment)),true, false)]",
+                        "visible": true,
                         "options": {
                             "text": "Virtual Machine deployment information:"
                         }
