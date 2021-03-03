@@ -256,8 +256,8 @@
                         },
                         "constraints": {
                             "required": false,
-                            "regex": "^{11,80}$",
-                            "validationMessage": "Password must contain numbers, leters and special characters, and the value must be 11-80 characters long."
+                            "regex": "^[a-zA-Z0-9!@#$%^&*()]{11,80}$",
+                            "validationMessage": "Password must contain numbers, leters and special characters ( ! @ # $ % ^ & * ( ) ), and the value must be 11-80 characters long."
                         },
                         "toolTip": "This is the Password for the VM(SS) deployment",
                         "visible": "[if(or(contains(steps('thridParty').enableCSDeployment),contains(steps('thridParty').enableQualysDeployment)),true, false)]"
