@@ -188,14 +188,14 @@
         {
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2020-06-01",
-            "location": "[parameters('location')]",
+            "location": "[deployment().location]",
             "name": "[concat(parameters('customerName'), '-Ingestion')]",
             "properties": {}
         },
         {
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2020-06-01",
-            "location": "[parameters('location')]",
+            "location": "[deployment().location]",
             "name": "[concat(parameters('customerName'), '-Resources')]",
             "properties": {}
         },
