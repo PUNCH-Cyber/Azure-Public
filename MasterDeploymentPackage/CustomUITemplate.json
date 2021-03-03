@@ -322,9 +322,6 @@
                         "placeholder": "",
                         "defaultValue": "",
                         "toolTip": "This is the password for the Qualys account",
-                        "constraints": {
-                            "required": false
-                        },
                         "visible": "[if(steps('thirdParty').enableQualysDeployment, true, false)]"
                     }
 				]
