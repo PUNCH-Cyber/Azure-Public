@@ -7,16 +7,6 @@
             "isWizard": true,
             "basics": {
                 "description": "**Providence Secure Customer Onboarding Deployment**",
-                "resourceGroup": {
-                    "constraints": {
-                        "validations": [
-                            {
-                                "isValid": "^[0-9a-zA-Z]{1,40}-Sentinel$",
-                                "message": "This Resource Group should follow this convention, Customer-Sentinel."
-                            }
-                        ]
-                    }
-                },
                 "location": {
                     "label": "Location",
                     "toolTip": "Location for all resources",
@@ -228,7 +218,7 @@
 					{
                         "name": "textBlock2",
                         "type": "Microsoft.Common.TextBlock",
-                        "visible": "[if(or(contains(steps('thridParty').enableCSDeployment),contains(steps('thridParty').enableQualysDeployment)),true, false)]",
+                        "visible": true,
                         "options": {
                             "text": "Virtual Machine deployment information:"
                         }
@@ -241,7 +231,7 @@
 						"osPlatform": "Linux",
                         "constraints": {
                             "required": false,
-                            "regex": "^[a-zA-Z0-9-]{1,30}$",
+                            "regex": "^[a-z0-9A-Z]{1,30}$",
                             "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
                         },
                         "toolTip": "This is the Username for the VM(SS) deployment",
@@ -256,8 +246,8 @@
                         },
                         "constraints": {
                             "required": false,
-                            "regex": "^[a-zA-Z0-9!@#$%&]{11,80}$",
-                            "validationMessage": "Password must contain numbers, leters and special characters ( ! @ # $ % ^ & * ( ) ), and the value must be 11-80 characters long."
+                            "regex": "^[a-zA-Z0-9]{8,}$",
+                            "validationMessage": "Password must be at least 8 characters long, contain only numbers and letters"
                         },
                         "toolTip": "This is the Password for the VM(SS) deployment",
                         "visible": "[if(or(contains(steps('thridParty').enableCSDeployment),contains(steps('thridParty').enableQualysDeployment)),true, false)]"
@@ -265,7 +255,7 @@
 					{
                         "name": "textBlock3",
                         "type": "Microsoft.Common.TextBlock",
-                        "visible": "[if(or(contains(steps('thridParty').enableCSDeployment),contains(steps('thridParty').enableQualysDeployment)),true, false)]",
+                        "visible": true,
                         "options": {
                             "text": "CrowdStrike deployment information:"
                         }
@@ -301,7 +291,7 @@
 					{
                         "name": "textBlock4",
                         "type": "Microsoft.Common.TextBlock",
-                        "visible": "[if(contains(steps('thridParty').enableQualysDeployment), true, false)]",
+                        "visible": true,
                         "options": {
                             "text": "Qualys deployment information"
                         }
@@ -329,7 +319,8 @@
                         "toolTip": "This is the password for the Qualys account",
                         "constraints": {
                             "required": false,
-                            "validationMessage": "Qualys Password"
+                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
                         },
                         "visible": "[if(contains(steps('thridParty').enableQualysDeployment), true, false)]"
                     }
