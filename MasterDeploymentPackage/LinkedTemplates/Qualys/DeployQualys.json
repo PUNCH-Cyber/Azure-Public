@@ -67,7 +67,7 @@
                 "forceUpdateTag": "1",
                 "azPowerShellVersion": "3.0",
                 "arguments": "[format('-workspaceId {0} -workspaceKey {1} -qualysInstanceURL {2} -qualysAuthInfo {3} -integrationName {4} -sentinelTableName {5}', parameters('WorkspaceIDOutput'), parameters('WorkspaceKeyOutput'), parameters('QualysInstanceURL'), variables('authinfo'), parameters('integrationName'), parameters('SentinelTableName'))]",
-                "primaryScriptURI": "https://raw.githubusercontent.com/PUNCH-Cyber/Azure/master/ARM%20Templates/qualysvm_sentinel_integration/qualys_addsentinelintegration.ps1?token=ARHDQO42RXVZ4MAY45U2W33AH4EHC",
+                "primaryScriptURI": "https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/MasterDeploymentPackage/LinkedTemplates/Qualys/qualys_addsentinelintegration.ps1",
                 "supportingScriptUris": [],
                 "timeout": "PT30M",
                 "cleanupPreference": "Always",
