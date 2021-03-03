@@ -334,7 +334,7 @@
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2020-10-01",
             "name": "SyslogLinkedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
@@ -379,7 +379,7 @@
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2020-10-01",
             "name": "QualysLinkedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
