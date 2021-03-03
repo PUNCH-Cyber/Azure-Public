@@ -328,7 +328,8 @@
                         "defaultValue": "",
                         "toolTip": "This is the password for the Qualys account",
                         "constraints": {
-                            "required": false
+                            "required": false,
+                            "validationMessage": "Qualys Password"
                         },
                         "visible": "[if(contains(steps('thridParty').enableQualysDeployment), true, false)]"
                     }
