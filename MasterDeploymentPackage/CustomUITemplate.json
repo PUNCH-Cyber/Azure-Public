@@ -241,7 +241,7 @@
 						"osPlatform": "Linux",
                         "constraints": {
                             "required": false,
-                            "regex": "^[a-z0-9A-Z]{1,30}$",
+                            "regex": "^[a-z0-9A-Z-]{1,30}$",
                             "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
                         },
                         "toolTip": "This is the Username for the VM(SS) deployment",
@@ -256,8 +256,8 @@
                         },
                         "constraints": {
                             "required": false,
-                            "regex": "^[a-zA-Z0-9]{8,}$",
-                            "validationMessage": "Password must be at least 8 characters long, contain only numbers and letters"
+                            "regex": "^{11,80}$",
+                            "validationMessage": "Password must contain numbers, leters and special characters, and the value must be 11-80 characters long."
                         },
                         "toolTip": "This is the Password for the VM(SS) deployment",
                         "visible": "[if(or(contains(steps('thridParty').enableCSDeployment),contains(steps('thridParty').enableQualysDeployment)),true, false)]"
