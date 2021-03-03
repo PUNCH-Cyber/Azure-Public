@@ -329,8 +329,6 @@
                         "toolTip": "This is the password for the Qualys account",
                         "constraints": {
                             "required": false,
-                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
-                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
                         },
                         "visible": "[if(contains(steps('thridParty').enableQualysDeployment), true, false)]"
                     }
