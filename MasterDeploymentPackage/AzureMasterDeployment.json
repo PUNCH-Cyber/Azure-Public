@@ -105,7 +105,7 @@
             "metadata": {
                 "description": "The location of resources"
             },
-            "defaultValue": "https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Tools/Sentinel-All-In-One/"
+            "defaultValue": "https://github.com/PUNCH-Cyber/Azure-Public/tree/main/MasterDeploymentPackage"
         },
         "_artifactsLocationSasToken": {
             "type": "securestring",
@@ -356,7 +356,7 @@
                     "properties": {
                         "mode": "Incremental",
                         "templateLink": {
-                            "uri": "[uri(parameters('_artifactsLocation'), concat('ARMTemplates/LinkedTemplates/DeploySyslog.json', parameters('_artifactsLocationSasToken')))]",
+                            "uri": "[uri(parameters('_artifactsLocation'), concat('LinkedTemplates/Syslog/Syslog-VMSS-ub-Template.json', parameters('_artifactsLocationSasToken')))]",
                             "contentVersion": "1.0.0.0"
                         },
                         "parameters": {
@@ -401,7 +401,7 @@
                     "properties": {
                         "mode": "Incremental",
                         "templateLink": {
-                            "uri": "[uri(parameters('_artifactsLocation'), concat('ARMTemplates/LinkedTemplates/DeployQualys.json', parameters('_artifactsLocationSasToken')))]",
+                            "uri": "[uri(parameters('_artifactsLocation'), concat('LinkedTemplates/Qualys/DeployQualys.json', parameters('_artifactsLocationSasToken')))]",
                             "contentVersion": "1.0.0.0"
                         },
                         "parameters": {
@@ -446,7 +446,7 @@
                     "properties": {
                         "mode": "Incremental",
                         "templateLink": {
-                            "uri": "[uri(parameters('_artifactsLocation'), concat('ARMTemplates/LinkedTemplates/DeployCrowdStrike.json', parameters('_artifactsLocationSasToken')))]",
+                            "uri": "[uri(parameters('_artifactsLocation'), concat('LinkedTemplates/CrowdStrike/DeployCrowdStrike.json', parameters('_artifactsLocationSasToken')))]",
                             "contentVersion": "1.0.0.0"
                         },
                         "parameters": {
