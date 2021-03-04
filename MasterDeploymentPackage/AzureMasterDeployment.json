@@ -119,7 +119,7 @@
             "metadata": {
                 "description": "Location for all resources."
             },
-            "defaultValue": "[resourceGroup().location]"
+            "defaultValue": "[deployment().location]"
         },
         "enableSyslog": {
             "type": "bool",
@@ -188,151 +188,177 @@
         {
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2020-06-01",
-            "location": "[deployment().location]",
+            "location": "[parameters('location')]",
+            "name": "[concat(parameters('customerName'), '-Sentinel')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "location": "[parameters('location')]",
             "name": "[concat(parameters('customerName'), '-Ingestion')]",
             "properties": {}
         },
         {
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2020-06-01",
-            "location": "[deployment().location]",
+            "location": "[parameters('location')]",
             "name": "[concat(parameters('customerName'), '-Resources')]",
             "properties": {}
         },
         {
-            "name": "[parameters('customerName')]",
-            "type": "Microsoft.OperationalInsights/workspaces",
-            "apiVersion": "2015-11-01-preview",
-            "location": "[parameters('location')]",
-            "properties": {
-                "retentionInDays": "[parameters('dataRetention')]",
-                "workspaceCapping": "[if(equals(parameters('dailyQuota'),0), json('null'), variables('quoatSetting'))]",
-                "features": {
-                    "immediatePurgeDataOn30Days": "[parameters('immediatePurgeDataOn30Days')]"
-                },
-                "sku": {
-                    "name": "[parameters('pricingTier')]"
-                }
-            }
-        },
-        {
-            "name": "[concat('SecurityInsights','(', parameters('customerName'),')')]",
-            "type": "Microsoft.OperationsManagement/solutions",
-            "apiVersion": "2015-11-01-preview",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
-            ],
-            "properties": {
-                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('customerName'))]"
-            },
-            "plan": {
-                "name": "[concat('SecurityInsights','(', parameters('customerName'),')')]",
-                "product": "OMSGallery/SecurityInsights",
-                "publisher": "Microsoft",
-                "promotionCode": ""
-            }
-        },
-        {
-            "condition": "[not(empty(parameters('enableDataConnectorsKind')))]",
-            "name": "enableDataConnectorsKind",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
+            "apiVersion": "2019-10-01",
+            "name": "SyslogLinkedDeployment",
+            "resourceGroup": "[concat(parameters('customerName'), '-Sentinel')]",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Sentinel'))]"
             ],
             "properties": {
                 "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('ARMTemplates/LinkedTemplates/dataConnectors.json', parameters('_artifactsLocationSasToken')))]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "dataConnectorsKind": {
-                        "value": "[parameters('enableDataConnectorsKind')]"
-                    },
-                    "workspaceName": {
-                        "value": "[parameters('customerName')]"
-                    },
-                    "tenantId": {
-                        "value": "[subscription().tenantId]"
-                    },
-                    "subscriptionId": {
-                        "value": "[subscription().subscriptionId]"
-                    },
-                    "securityCollectionTier": {
-                        "value": "[parameters('securityCollectionTier')]"
-                    },
-                    "mcasDiscoveryLogs": {
-                        "value": "[parameters('mcasDiscoveryLogs')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    }
+                "template": {
+                "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                        {
+                            "name": "[parameters('customerName')]",
+                            "type": "Microsoft.OperationalInsights/workspaces",
+                            "apiVersion": "2015-11-01-preview",
+                            "location": "[parameters('location')]",
+                            "properties": {
+                                "retentionInDays": "[parameters('dataRetention')]",
+                                "workspaceCapping": "[if(equals(parameters('dailyQuota'),0), json('null'), variables('quoatSetting'))]",
+                                "features": {
+                                    "immediatePurgeDataOn30Days": "[parameters('immediatePurgeDataOn30Days')]"
+                                },
+                                "sku": {
+                                    "name": "[parameters('pricingTier')]"
+                                }
+                            }
+                        },
+                        {
+                            "name": "[concat('SecurityInsights','(', parameters('customerName'),')')]",
+                            "type": "Microsoft.OperationsManagement/solutions",
+                            "apiVersion": "2015-11-01-preview",
+                            "location": "[parameters('location')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
+                            ],
+                            "properties": {
+                                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('customerName'))]"
+                            },
+                            "plan": {
+                                "name": "[concat('SecurityInsights','(', parameters('customerName'),')')]",
+                                "product": "OMSGallery/SecurityInsights",
+                                "publisher": "Microsoft",
+                                "promotionCode": ""
+                            }
+                        },
+                        {
+                            "condition": "[not(empty(parameters('enableDataConnectorsKind')))]",
+                            "name": "enableDataConnectorsKind",
+                            "type": "Microsoft.Resources/deployments",
+                            "apiVersion": "2020-06-01",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
+                            ],
+                            "properties": {
+                                "mode": "Incremental",
+                                "templateLink": {
+                                    "uri": "[uri(parameters('_artifactsLocation'), concat('ARMTemplates/LinkedTemplates/dataConnectors.json', parameters('_artifactsLocationSasToken')))]",
+                                    "contentVersion": "1.0.0.0"
+                                },
+                                "parameters": {
+                                    "dataConnectorsKind": {
+                                        "value": "[parameters('enableDataConnectorsKind')]"
+                                    },
+                                    "workspaceName": {
+                                        "value": "[parameters('customerName')]"
+                                    },
+                                    "tenantId": {
+                                        "value": "[subscription().tenantId]"
+                                    },
+                                    "subscriptionId": {
+                                        "value": "[subscription().subscriptionId]"
+                                    },
+                                    "securityCollectionTier": {
+                                        "value": "[parameters('securityCollectionTier')]"
+                                    },
+                                    "mcasDiscoveryLogs": {
+                                        "value": "[parameters('mcasDiscoveryLogs')]"
+                                    },
+                                    "location": {
+                                        "value": "[parameters('location')]"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "condition": "[or(parameters('enableFusionAlert'),parameters('enableMicrosoftAlerts'),parameters('enableMLAlerts'))]",
+                            "name": "enableAlerts",
+                            "type": "Microsoft.Resources/deployments",
+                            "apiVersion": "2020-06-01",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
+                            ],
+                            "properties": {
+                                "mode": "Incremental",
+                                "templateLink": {
+                                    "uri": "[uri(parameters('_artifactsLocation'), concat('ARMTemplates/LinkedTemplates/alertRules.json', parameters('_artifactsLocationSasToken')))]",
+                                    "contentVersion": "1.0.0.0"
+                                },
+                                "parameters": {
+                                    "dataConnectorsKind": {
+                                        "value": "[parameters('enableDataConnectorsKind')]"
+                                    },
+                                    "workspaceName": {
+                                        "value": "[parameters('customerName')]"
+                                    },
+                                    "location": {
+                                        "value": "[parameters('location')]"
+                                    },
+                                    "enableFusionAlert":{
+                                        "value": "[parameters('enableFusionAlert')]"
+                                    },
+                                    "enableMicrosoftAlerts":{
+                                        "value": "[parameters('enableMicrosoftAlerts')]"
+                                    },
+                                    "enableMLAlerts":{
+                                        "value": "[parameters('enableMLAlerts')]"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "condition": "[parameters('enableScheduledAlerts')]",
+                            "name": "enableScheduledAlerts",
+                            "type": "Microsoft.Resources/deployments",
+                            "apiVersion": "2020-06-01",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Resources/deployments/', 'enableAlerts')]"
+                            ],
+                            "properties": {
+                                "mode": "Incremental",
+                                "templateLink": {
+                                    "uri": "[uri(parameters('_artifactsLocation'), concat('ARMTemplates/LinkedTemplates/scheduledAlerts.json', parameters('_artifactsLocationSasToken')))]",
+                                    "contentVersion": "1.0.0.0"
+                                },
+                                "parameters": {
+                                    "workspaceName": {
+                                        "value": "[parameters('customerName')]"
+                                    },
+                                    "dataConnectorsList":{
+                                        "value": "[replace(replace(string(parameters('enableDataConnectorsKind')),'\"',''),'[','')]"
+                                    }
+                                }
+                            }
+                        }
+                    ]
                 }
             }
         },
         {
-            "condition": "[or(parameters('enableFusionAlert'),parameters('enableMicrosoftAlerts'),parameters('enableMLAlerts'))]",
-            "name": "enableAlerts",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('ARMTemplates/LinkedTemplates/alertRules.json', parameters('_artifactsLocationSasToken')))]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "dataConnectorsKind": {
-                        "value": "[parameters('enableDataConnectorsKind')]"
-                    },
-                    "workspaceName": {
-                        "value": "[parameters('customerName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "enableFusionAlert":{
-                        "value": "[parameters('enableFusionAlert')]"
-                    },
-                    "enableMicrosoftAlerts":{
-                        "value": "[parameters('enableMicrosoftAlerts')]"
-                    },
-                    "enableMLAlerts":{
-                        "value": "[parameters('enableMLAlerts')]"
-                    }
-                }
-            }
-        },
-        {
-            "condition": "[parameters('enableScheduledAlerts')]",
-            "name": "enableScheduledAlerts",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments/', 'enableAlerts')]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('ARMTemplates/LinkedTemplates/scheduledAlerts.json', parameters('_artifactsLocationSasToken')))]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "workspaceName": {
-                        "value": "[parameters('customerName')]"
-                    },
-                    "dataConnectorsList":{
-                        "value": "[replace(replace(string(parameters('enableDataConnectorsKind')),'\"',''),'[','')]"
-                    }
-                }
-            }
-        },
-        {
+            "condition": "[parameters('enableSyslog')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "SyslogLinkedDeployment",
@@ -343,7 +369,6 @@
             "properties": {
                 "mode": "Incremental",
                 "template": {
-                    "condition": "[parameters('enableSyslog')]",
                     "name": "enableSyslog",
                     "type": "Microsoft.Resources/deployments",
                     "apiVersion": "2020-06-01",
@@ -378,6 +403,8 @@
             }
         },
         {
+            
+            "condition": "[parameters('enableQualysDeployment')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "QualysLinkedDeployment",
@@ -423,6 +450,7 @@
             }
         },
         {
+            "condition": "[parameters('enableCSDeployment')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "CrowdStrikeLinkedDeployment",
