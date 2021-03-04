@@ -209,7 +209,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
-            "name": "SyslogLinkedDeployment",
+            "name": "SentinelLinkedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Sentinel')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Sentinel'))]"
