@@ -364,7 +364,8 @@
             "name": "SyslogLinkedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -372,9 +373,6 @@
                     "name": "enableSyslog",
                     "type": "Microsoft.Resources/deployments",
                     "apiVersion": "2020-06-01",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
-                    ],
                     "properties": {
                         "mode": "Incremental",
                         "templateLink": {
@@ -410,7 +408,8 @@
             "name": "QualysLinkedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -419,9 +418,6 @@
                     "name": "enableSyslog",
                     "type": "Microsoft.Resources/deployments",
                     "apiVersion": "2019-10-01",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
-                    ],
                     "properties": {
                         "mode": "Incremental",
                         "templateLink": {
@@ -456,7 +452,8 @@
             "name": "CrowdStrikeLinkedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -465,9 +462,6 @@
                     "name": "enableSyslog",
                     "type": "Microsoft.Resources/deployments",
                     "apiVersion": "2020-06-01",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
-                    ],
                     "properties": {
                         "mode": "Incremental",
                         "templateLink": {
