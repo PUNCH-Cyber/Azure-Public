@@ -245,7 +245,7 @@
                                 "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
                             ],
                             "properties": {
-                                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('customerName'))]"
+                                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
                             },
                             "plan": {
                                 "name": "[concat('SecurityInsights','(', parameters('customerName'),')')]",
