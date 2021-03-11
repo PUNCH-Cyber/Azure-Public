@@ -5,7 +5,7 @@
         "customerName": {
             "type": "string",
             "metadata": {
-                "description":"MSSP - Customer Name"
+                "description": "MSSP - Customer Name"
             }
         },
         "pricingTier": {
@@ -27,8 +27,8 @@
             "type": "int",
             "metadata": {
                 "description": "Daily ingestion limit in GBs."
-                },
-            "defaultValue": 0
+            },
+            "defaultValue": 30
         },
         "dataRetention": {
             "type": "int",
@@ -60,122 +60,55 @@
             },
             "defaultValue": "f7ca9621-6ba3-4d52-a241-e0ed3ea6a78a"
         }
-
     },
     "variables": {
         "ingestLimitSetting": {
-            "dailyLimitGB":"[parameters('dailyIngestLimit')]"
+            "dailyLimitGB": "[parameters('dailyIngestLimit')]"
         },
         "mspRegistrationName": "[guid(parameters('mspOfferName'))]",
         "mspAssignmentName": "[guid(parameters('mspOfferName'))]",
-        "authorizations": {
-            "type": "array",
-            "metadata": {
-                "description": "List of authorizations granted to the provider"
+        "authorizations": [
+            {
+                "principal id": "8b9d8527-1ce0-492a-a422-c31a8c3fbbd0",
+                "roleDefinitionId": "acdd72a7-3385-48ef-bd42-f606fba81ae7",
+                "principalIdDisplayName": "PIM_Group"
             },
-            "defaultValue": [
-                { 
-                    "principal id": "8b9d8527-1ce0-492a-a422-c31a8c3fbbd0",
-                    "roleDefinitionId": "acdd72a7-3385-48ef-bd42-f606fba81ae7",
-                    "principalIdDisplayName": "PIM_Group" 
-                }, 
-                { 
-                    "principal id": "8b9d8527-1ce0-492a-a422-c31a8c3fbbd0",
-                    "roleDefinitionId": "91c1777a-f3dc-4fae-b103-61d183457e46",
-                    "principalIdDisplayName": "PIM_Group" 
-                }   
-            ]
-        },
-        "securityCollectionTier": {
-            "type": "string",
-            "defaultValue": "Recommended",
-            "allowedValues": [
-                "All",
-                "Recommended",
-                "Minimal",
-                "None"
-            ],
-            "metadata": {
-                "description": "Tier for gathering Windows Security Events."
+            {
+                "principal id": "8b9d8527-1ce0-492a-a422-c31a8c3fbbd0",
+                "roleDefinitionId": "91c1777a-f3dc-4fae-b103-61d183457e46",
+                "principalIdDisplayName": "PIM_Group"
             }
-        },
-        "enableDataConnectorsKind": {
-            "type": "array",
-            "metadata": {
-                "description": "The kind of data connectors that can be deployed via ARM templates are the following: [\"AzureActivityLog\",\"SecurityInsightsSecurityEventCollectionConfiguration\",\"WindowsFirewall\",\"DnsAnalytics\"], Reference: https://docs.microsoft.com/azure/templates/microsoft.operationalinsights/2020-03-01-preview/workspaces/datasources#microsoftoperationalinsightsworkspacesdatasources-object"
+        ],
+        "securityCollectionTier": "Recommended",
+        "enableDataConnectorsKind": [
+            {
+                "label": "Azure AD Identity Protection",
+                "value": "AzureActiveDirectory"
             },
-            "defaultValue": [
-                {
-                    "label": "Azure AD Identity Protection",
-                    "value": "AzureActiveDirectory"
-                },
-                {
-                    "label": "Azure Security Center",
-                    "value": "AzureSecurityCenter"
-                },
-                {
-                    "label": "Azure Activity",
-                    "value": "AzureActivity"
-                },
-                {
-                    "label": "Security Events",
-                    "value": "SecurityEvents"
-                },
-                {
-                    "label": "Linux Syslog",
-                    "value": "Syslog"
-                }
-            ]
-        },
-        "enableFusionAlert": {
-            "type": "bool",
-            "metadata": {
-                "description": "Enable Fusion analytics rules"
+            {
+                "label": "Azure Security Center",
+                "value": "AzureSecurityCenter"
             },
-            "defaultValue": false
-        },
-        "enableMicrosoftAlerts": {
-            "type": "bool",
-            "metadata": {
-                "description": "Enable Microsoft analytics rules"
+            {
+                "label": "Azure Activity",
+                "value": "AzureActivity"
             },
-            "defaultValue": false
-        },
-        "enableMLAlerts": {
-            "type": "bool",
-            "metadata": {
-                "description": "Enable ML Behavior Analytics rules"
+            {
+                "label": "Security Events",
+                "value": "SecurityEvents"
             },
-            "defaultValue": false
-        },
-        "enableScheduledAlerts": {
-            "type": "bool",
-            "metadata": {
-                "description": "Enable Scheduled analytics rules"
-            },
-            "defaultValue": false
-        },
-        "mcasDiscoveryLogs": {
-            "type": "bool",
-            "metadata": {
-                "description": "Enable MCAS Discovery Logs"
-            },
-            "defaultValue": false
-        },
-        "_artifactsLocation": {
-            "type": "string",
-            "metadata": {
-                "description": "The location of resources"
-            },
-            "defaultValue": "https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Tools/Sentinel-All-In-One/"
-        },
-        "_artifactsLocationSasToken": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Auto-generated token to access _artifactsLocation. Leave it blank unless you need to provide your own value."
-            },
-            "defaultValue": ""
-        }
+            {
+                "label": "Linux Syslog",
+                "value": "Syslog"
+            }
+        ],
+        "enableFusionAlert": false,
+        "enableMicrosoftAlerts": false,
+        "enableMLAlerts": false,
+        "enableScheduledAlerts": false,
+        "mcasDiscoveryLogs": false,
+        "_artifactsLocation": "https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Tools/Sentinel-All-In-One/",
+        "_artifactsLocationSasToken": ""
     },
     "resources": [
         {
@@ -192,20 +125,20 @@
             }
         },
         {
+            "name": "[concat('SecurityInsights','(', parameters('customerName'),')')]",
             "type": "Microsoft.OperationsManagement/solutions",
             "apiVersion": "2015-11-01-preview",
-            "name": "[concat('SecurityInsights','(',parameters('customerName'),')')]",
-            "location": "[resourceGroup().location]",
-            "plan": {
-                "name": "[concat('SecurityInsights','(',parameters('customerName'),')')]",
-                "product": "OMSGallery/SecurityInsights",
-                "publisher": "Microsoft"
-            },
             "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces/',parameters('customerName'))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
             ],
             "properties": {
-                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/',parameters('customerName'))]"
+                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
+            },
+            "plan": {
+                "name": "[concat('SecurityInsights','(', parameters('customerName'),')')]",
+                "product": "OMSGallery/SecurityInsights",
+                "publisher": "Microsoft",
+                "promotionCode": ""
             }
         },
         {
@@ -214,7 +147,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-05-01",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights', parameters('customerName')))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -253,7 +186,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-05-01",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights', parameters('customerName')))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -271,13 +204,13 @@
                     "location": {
                         "value": "[resourceGroup().location]"
                     },
-                    "enableFusionAlert":{
+                    "enableFusionAlert": {
                         "value": "[variables('enableFusionAlert')]"
                     },
-                    "enableMicrosoftAlerts":{
+                    "enableMicrosoftAlerts": {
                         "value": "[variables('enableMicrosoftAlerts')]"
                     },
-                    "enableMLAlerts":{
+                    "enableMLAlerts": {
                         "value": "[variables('enableMLAlerts')]"
                     }
                 }
@@ -301,7 +234,7 @@
                     "workspaceName": {
                         "value": "[parameters('customerName')]"
                     },
-                    "dataConnectorsList":{
+                    "dataConnectorsList": {
                         "value": "[replace(replace(string(variables('enableDataConnectorsKind')),'\"',''),'[','')]"
                     }
                 }
