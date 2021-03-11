@@ -132,7 +132,6 @@
             "name": "[concat('SecurityInsights','(', parameters('customerName'),')')]",
             "type": "Microsoft.OperationsManagement/solutions",
             "apiVersion": "2015-11-01-preview",
-            "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
             ],
