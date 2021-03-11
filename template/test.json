@@ -23,12 +23,12 @@
             ],
             "defaultValue": "PerGB2018"
         },
-        "dailyIngestLimit": {
+        "dailyQuota": {
             "type": "int",
             "metadata": {
-                "description": "Daily ingestion limit in GBs."
+                "description": "Daily ingestion limit in GBs. This limit doesn't apply to the following tables: SecurityAlert, SecurityBaseline, SecurityBaselineSummary, SecurityDetection, SecurityEvent, WindowsFirewall, MaliciousIPCommunication, LinuxAuditLog, SysmonEvent, ProtectionStatus, WindowsEvent"
             },
-            "defaultValue": 30
+            "defaultValue": 0
         },
         "dataRetention": {
             "type": "int",
@@ -62,9 +62,11 @@
         }
     },
     "variables": {
-        "ingestLimitSetting": {
-            "dailyLimitGB": "[parameters('dailyIngestLimit')]"
+        "quoatSetting": {
+            "dailyQuotaGb": "[parameters('dailyQuota')]"
         },
+        "immediatePurgeDataOn30Days": true,
+        "location": "[deployment().location]",
         "mspRegistrationName": "[guid(parameters('mspOfferName'))]",
         "mspAssignmentName": "[guid(parameters('mspOfferName'))]",
         "authorizations": [
@@ -115,10 +117,13 @@
             "name": "[parameters('customerName')]",
             "type": "Microsoft.OperationalInsights/workspaces",
             "apiVersion": "2015-11-01-preview",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('location')]",
             "properties": {
                 "retentionInDays": "[parameters('dataRetention')]",
-                "workspaceCapping": "[if(equals(parameters('dailyIngestLimit'),0), json('null'), variables('ingestLimitSetting'))]",
+                "workspaceCapping": "[if(equals(parameters('dailyQuota'),0), json('null'), variables('quoatSetting'))]",
+                "features": {
+                    "immediatePurgeDataOn30Days": "[variables('immediatePurgeDataOn30Days')]"
+                },
                 "sku": {
                     "name": "[parameters('pricingTier')]"
                 }
@@ -128,6 +133,7 @@
             "name": "[concat('SecurityInsights','(', parameters('customerName'),')')]",
             "type": "Microsoft.OperationsManagement/solutions",
             "apiVersion": "2015-11-01-preview",
+            "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
             ],
@@ -145,9 +151,9 @@
             "condition": "[not(empty(variables('enableDataConnectorsKind')))]",
             "name": "enableDataConnectorsKind",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-05-01",
+            "apiVersion": "2020-06-01",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights', parameters('customerName')))]"
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -175,7 +181,7 @@
                         "value": "[variables('mcasDiscoveryLogs')]"
                     },
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[variables('location')]"
                     }
                 }
             }
@@ -184,9 +190,9 @@
             "condition": "[or(variables('enableFusionAlert'),variables('enableMicrosoftAlerts'),variables('enableMLAlerts'))]",
             "name": "enableAlerts",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-05-01",
+            "apiVersion": "2020-06-01",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights', parameters('customerName')))]"
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -202,15 +208,15 @@
                         "value": "[parameters('customerName')]"
                     },
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[variables('location')]"
                     },
-                    "enableFusionAlert": {
+                    "enableFusionAlert":{
                         "value": "[variables('enableFusionAlert')]"
                     },
-                    "enableMicrosoftAlerts": {
+                    "enableMicrosoftAlerts":{
                         "value": "[variables('enableMicrosoftAlerts')]"
                     },
-                    "enableMLAlerts": {
+                    "enableMLAlerts":{
                         "value": "[variables('enableMLAlerts')]"
                     }
                 }
@@ -220,7 +226,7 @@
             "condition": "[variables('enableScheduledAlerts')]",
             "name": "enableScheduledAlerts",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-05-01",
+            "apiVersion": "2020-06-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments/', 'enableAlerts')]"
             ],
@@ -234,7 +240,7 @@
                     "workspaceName": {
                         "value": "[parameters('customerName')]"
                     },
-                    "dataConnectorsList": {
+                    "dataConnectorsList":{
                         "value": "[replace(replace(string(variables('enableDataConnectorsKind')),'\"',''),'[','')]"
                     }
                 }
