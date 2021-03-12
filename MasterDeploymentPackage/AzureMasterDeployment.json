@@ -27,8 +27,7 @@
             "type": "int",
             "metadata": {
                 "description": "Daily ingestion limit in GBs. This limit doesn't apply to the following tables: SecurityAlert, SecurityBaseline, SecurityBaselineSummary, SecurityDetection, SecurityEvent, WindowsFirewall, MaliciousIPCommunication, LinuxAuditLog, SysmonEvent, ProtectionStatus, WindowsEvent"
-            },
-            "defaultValue": 0
+            }
         },
         "dataRetention": {
             "type": "int",
@@ -279,7 +278,7 @@
             "name": "SentinelExtrasDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Sentinel')]",
             "dependsOn": [
-                "SentinelNestedDeployment"
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -292,9 +291,6 @@
                             "name": "enableDataConnectorsKind",
                             "type": "Microsoft.Resources/deployments",
                             "apiVersion": "2020-06-01",
-                            "dependsOn": [
-                                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
-                            ],
                             "properties": {
                                 "mode": "Incremental",
                                 "templateLink": {
@@ -331,9 +327,6 @@
                             "name": "enableAlerts",
                             "type": "Microsoft.Resources/deployments",
                             "apiVersion": "2020-06-01",
-                            "dependsOn": [
-                                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
-                            ],
                             "properties": {
                                 "mode": "Incremental",
                                 "templateLink": {
