@@ -209,7 +209,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
-            "name": "SentinelLinkedDeployment",
+            "name": "SentinelNestedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Sentinel')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Sentinel'))]"
@@ -220,7 +220,7 @@
                 "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
                 "contentVersion": "1.0.0.0",
                 "resources": [
-                        {
+                    {
                             "name": "[parameters('customerName')]",
                             "type": "Microsoft.OperationalInsights/workspaces",
                             "apiVersion": "2015-11-01-preview",
@@ -253,7 +253,26 @@
                                 "publisher": "Microsoft",
                                 "promotionCode": ""
                             }
-                        },
+                        }
+
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "SentinelExtrasDeployment",
+            "resourceGroup": "[concat(parameters('customerName'), '-Sentinel')]",
+            "dependsOn": [
+                "SentinelNestedDeployment"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                "contentVersion": "1.0.0.0",
+                "resources": [
                         {
                             "condition": "[not(empty(parameters('enableDataConnectorsKind')))]",
                             "name": "enableDataConnectorsKind",
