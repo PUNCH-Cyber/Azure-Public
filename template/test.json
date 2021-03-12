@@ -183,7 +183,7 @@
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2019-10-01",
         "name": "lighthouse",
-        "subscriptionId": "[subscription().id]",
+        "subscriptionId": "[subscription()]",
         "properties": {
             "mode": "Incremental",
             "template": {
