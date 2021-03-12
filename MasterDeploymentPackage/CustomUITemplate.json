@@ -301,6 +301,18 @@
                             "text": "Qualys deployment information:"
                         }
                     },
+			{
+                        "name": "qualysURL",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Qualys URL",
+                        "placeholder": "",
+                        "defaultValue": "",
+                        "toolTip": "This account URL must be granted access to the API platform to work",
+                        "constraints": {
+                            "required": false,
+                        },
+                        "visible": "[if(steps('thirdParty').enableQualysDeployment, true, false)]"
+                    },
                     {
                         "name": "qualysUser",
                         "type": "Microsoft.Common.TextBox",
