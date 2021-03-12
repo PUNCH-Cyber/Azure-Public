@@ -147,6 +147,12 @@
             },
             "defaultValue": false
         },
+        "qualysURL": {
+            "type": "string",
+            "metadata": {
+                "description": "Qualys URL value"
+            }
+        },
         "qualysUser": {
             "type": "string",
             "metadata": {
@@ -389,7 +395,7 @@
             "properties": {
                 "mode": "Incremental",
                 "template": {
-                    "name": "enableSyslog",
+                    "name": "deploySyslog",
                     "type": "Microsoft.Resources/deployments",
                     "apiVersion": "2020-06-01",
                     "properties": {
@@ -399,19 +405,22 @@
                             "contentVersion": "1.0.0.0"
                         },
                         "parameters": {
-                                "customerName": {
+                            "customerName": {
                                 "value": "[parameters('customerName')]"
                             },
-                                "AdminUserName": {
+                            "location": {
+                                        "value": "[parameters('location')]"
+                            },
+                            "VMAdminUserName": {
                                     "value": "[parameters('VMAdminUserName')]"
                             },
-                                "AdminPassword": {
+                            "VMAdminPassword": {
                                     "value": "[parameters('VMAdminPassword')]"
                             },
-                                "workspaceIdOutput": {
+                            "workspaceId": {
                                 "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
                             },
-                                "workspaceKeyOutput":{
+                            "workspaceKey":{
                                 "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
                             }
                         }
@@ -434,7 +443,7 @@
                 "mode": "Incremental",
                 "template": {
                     "condition": "[parameters('enableQualysDeployment')]",
-                    "name": "enableSyslog",
+                    "name": "enableQualys",
                     "type": "Microsoft.Resources/deployments",
                     "apiVersion": "2019-10-01",
                     "properties": {
@@ -444,14 +453,20 @@
                             "contentVersion": "1.0.0.0"
                         },
                         "parameters": {
-                                "customerName": {
+                            "customerName": {
                                 "value": "[parameters('customerName')]"
                             },
-                                "workspaceIdOutput": {
+                            "location": {
+                                        "value": "[parameters('location')]"
+                            },
+                            "workspaceIdOutput": {
                                 "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
                             },
-                                "workspaceKeyOutput":{
+                            "workspaceKeyOutput":{
                                 "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
+                            },
+                            "QualysInstanceURL": {
+                                "value": "[parameters('qualysURL')]"
                             },
                             "qualysUser": {
                                 "value": "[parameters('qualysUser')]"
@@ -478,7 +493,7 @@
                 "mode": "Incremental",
                 "template": {
                     "condition": "[parameters('enableCSDeployment')]",
-                    "name": "enableSyslog",
+                    "name": "enableCS",
                     "type": "Microsoft.Resources/deployments",
                     "apiVersion": "2020-06-01",
                     "properties": {
@@ -491,16 +506,22 @@
                             "customerName": {
                                 "value": "[parameters('customerName')]"
                             },
+                            "VMAdminUserName": {
+                                    "value": "[parameters('VMAdminUserName')]"
+                            },
+                            "VMAdminPassword": {
+                                    "value": "[parameters('VMAdminPassword')]"
+                            },
                             "workspaceIdOutput": {
                                 "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
                             },
                             "workspaceKeyOutput":{
                                 "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
                             },
-                            "CSAPIID": {
+                            "crowdstrikeId": {
                                 "value": "[parameters('CSAPIID')]"
                             },
-                            "CSAPIKEY": {
+                            "crowdstrikeSecret": {
                                 "value": "[parameters('CSAPIKEY')]"
                             }
                         }
