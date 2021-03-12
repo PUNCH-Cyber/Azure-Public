@@ -157,6 +157,42 @@
                     }
                 }
             }
+        },
+        {
+            "type": "microsoft.aadiam/diagnosticSettings",
+            "apiVersion": "2017-04-01",
+            "name": "setByARM",
+            "properties": {
+                "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('customerName'))]",
+                "logAnalyticsDestinationType": null,
+                "logs": [
+                    {
+                        "category": "AuditLogs",
+                        "enabled": true
+                    },
+                    {
+                        "category": "SignInLogs",
+                        "enabled": true
+                    },
+                    {
+                        "category": "AADNonInteractiveUserSignInLogs",
+                        "enabled": true
+                    },
+                    {
+                        "category": "AADServicePrincipalSignInLogs",
+                        "enabled": true
+                    },
+                    {
+                        "category": "AADManagedIdentitySignInLogs",
+                        "enabled": true
+                    },
+                    {
+                        "category": "AADProvisioningLogs",
+                        "enabled": true
+                    }
+                ],
+                "metrics": []
+            }
         }
     ],
     "outputs": {
