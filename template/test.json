@@ -86,7 +86,7 @@
                     "dataConnectorsKind": {
                         "value": "[variables('enableDataConnectorsKind')]"
                     },
-                    "customerName": {
+                    "workspaceName": {
                         "value": "[parameters('customerName')]"
                     },
                     "tenantId": {
@@ -125,7 +125,7 @@
                     "dataConnectorsKind": {
                         "value": "[variables('enableDataConnectorsKind')]"
                     },
-                    "customerName": {
+                    "workspaceName": {
                         "value": "[parameters('customerName')]"
                     },
                     "location": {
@@ -158,7 +158,7 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "customerName": {
+                    "workspaceName": {
                         "value": "[parameters('customerName')]"
                     },
                     "dataConnectorsList":{
