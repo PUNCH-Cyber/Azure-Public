@@ -27,6 +27,18 @@
                 "description": "Password for the Virtual Machine."
             }
         },
+        "crowdstrikeId": {
+            "type": "string",
+            "metadata": {
+                "description": "CS API ID"
+            }
+        },
+        "crowdstrikeSecret": {
+            "type": "securestring",
+            "metadata": {
+                "description": "CS API Secret"
+            }
+        },
         "workspaceIDOutput": {
             "type": "string",
             "defaultValue": null,
