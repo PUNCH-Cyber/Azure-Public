@@ -132,15 +132,13 @@
             "type": "string",
             "metadata": {
                 "description": "Username for the CrowdStrike VM and Syslog VMSS solutions"
-            },
-            "defaultValue": ""
+            }
         },
         "VMAdminPassword": {
             "type": "securestring",
             "metadata": {
                 "description": "Password for the CrowdStrike VM and Syslog VMSS solutions"
-            },
-            "defaultValue": ""
+            }
         },
         "enableQualysDeployment": {
             "type": "bool",
@@ -153,22 +151,19 @@
             "type": "string",
             "metadata": {
                 "description": "Qualys URL value"
-            },
-            "defaultValue": ""
+            }
         },
         "qualysUser": {
             "type": "string",
             "metadata": {
                 "description": "Qualys username value"
-            },
-            "defaultValue": ""
+            }
         },
         "qualysPass": {
             "type": "securestring",
             "metadata": {
                 "description": "Qualys user password value"
-            },
-            "defaultValue": ""
+            }
         },
         "enableCSDeployment": {
             "type": "bool",
@@ -181,15 +176,13 @@
             "type": "string",
             "metadata": {
                 "description": "CrowdStrike API Client ID value"
-            },
-            "defaultValue": ""
+            }
         },
         "CSAPIKEY": {
             "type": "securestring",
             "metadata": {
                 "description": "CrowdStrike API Client Secret value"
-            },
-            "defaultValue": ""
+            }
         }
     },
     "variables": {
@@ -258,7 +251,7 @@
                                 "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
                             ],
                             "properties": {
-                                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
+                                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('customerName'))]"
                             },
                             "plan": {
                                 "name": "[concat('SecurityInsights','(', parameters('customerName'),')')]",
@@ -397,7 +390,7 @@
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]",
-                "SentinelNestedDeployment"
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -444,7 +437,7 @@
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]",
-                "SentinelNestedDeployment"
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -494,7 +487,7 @@
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]",
-                "SentinelNestedDeployment"
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', parameters('customerName'),')'))]"
             ],
             "properties": {
                 "mode": "Incremental",
