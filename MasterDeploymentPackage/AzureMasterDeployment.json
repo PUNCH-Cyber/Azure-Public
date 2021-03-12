@@ -396,8 +396,7 @@
             "name": "SyslogLinkedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -443,8 +442,7 @@
             "name": "QualysLinkedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -493,8 +491,7 @@
             "name": "CrowdStrikeLinkedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]"
             ],
             "properties": {
                 "mode": "Incremental",
