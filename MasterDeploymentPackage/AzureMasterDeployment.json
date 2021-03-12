@@ -396,7 +396,8 @@
             "name": "SyslogLinkedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]",
+                "SentinelNestedDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -442,7 +443,8 @@
             "name": "QualysLinkedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]",
+                "SentinelNestedDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -491,7 +493,8 @@
             "name": "CrowdStrikeLinkedDeployment",
             "resourceGroup": "[concat(parameters('customerName'), '-Ingestion')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('customerName'), '-Ingestion'))]",
+                "SentinelNestedDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
