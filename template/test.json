@@ -30,7 +30,6 @@
         "_artifactsLocation": "https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Tools/Sentinel-All-In-One/",
         "_artifactsLocationSasToken": "",
         "location": "[resourceGroup().location]",
-        "SubId": "[subscription().subscriptionId]",
         "mspRegistrationName": "[guid(variables('mspOfferName'))]",
         "mspAssignmentName": "[guid(variables('mspOfferName'))]",
         "authorizations": [
@@ -184,7 +183,6 @@
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2019-10-01",
         "name": "lighthouse",
-        "subscriptionId": "[variables('SubId')]",
         "properties": {
             "mode": "Incremental",
             "template": {
