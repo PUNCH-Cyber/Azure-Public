@@ -17,7 +17,7 @@
         "dailyQuota": 0,
         "dataRetention": 90,
         "securityCollectionTier": "Recommended",
-        "enableDataConnectorsKind": ["AzureActivity","AzureSecurityCenter"],
+        "enableDataConnectorsKind": ["AzureActivity","AzureSecurityCenter","AzureActiveDirectory"],
         "enableFusionAlert": false,
         "enableMicrosoftAlerts": false,
         "enableMLAlerts": false,
