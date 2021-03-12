@@ -309,7 +309,7 @@
                         "defaultValue": "",
                         "toolTip": "This account URL must be granted access to the API platform to work",
                         "constraints": {
-                            "required": false,
+                            "required": false
                         },
                         "visible": "[if(steps('thirdParty').enableQualysDeployment, true, false)]"
                     },
