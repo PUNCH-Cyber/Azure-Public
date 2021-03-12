@@ -29,24 +29,7 @@
         "mcasDiscoveryLogs": false,
         "_artifactsLocation": "https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Tools/Sentinel-All-In-One/",
         "_artifactsLocationSasToken": "",
-        "location": "[resourceGroup().location]",
-        "mspRegistrationName": "[guid(variables('mspOfferName'))]",
-        "mspAssignmentName": "[guid(variables('mspOfferName'))]",
-        "authorizations": [
-            { 
-                "principal id": "8b9d8527-1ce0-492a-a422-c31a8c3fbbd0",
-                "roleDefinitionId": "acdd72a7-3385-48ef-bd42-f606fba81ae7",
-                "principalIdDisplayName": "PIM_Group" 
-            }, 
-            { 
-                "principal id": "8b9d8527-1ce0-492a-a422-c31a8c3fbbd0",
-                "roleDefinitionId": "91c1777a-f3dc-4fae-b103-61d183457e46",
-                "principalIdDisplayName": "PIM_Group" 
-            }   
-        ],
-        "mspOfferName":  "MSSP TEST NAMING CONVENTION",
-        "mspOfferDescription": "DESCIPTION OF SERVICES",
-        "managedByTenantId": "f7ca9621-6ba3-4d52-a241-e0ed3ea6a78a"
+        "location": "[resourceGroup().location]"
     },
     "resources": [
         {
@@ -177,43 +160,6 @@
                         "value": "[replace(replace(string(variables('enableDataConnectorsKind')),'\"',''),'[','')]"
                     }
                 }
-            }
-        },
-        {
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2019-10-01",
-        "name": "lighthouse",
-        "subscriptionId": "[guid(subscription())]",
-        "location": "[variables('location')]",
-        "properties": {
-            "mode": "Incremental",
-            "template": {
-                "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                "contentVersion": "1.0.0.0",
-                "resources": [
-                    {
-                        "type": "Microsoft.ManagedServices/registrationDefinitions",
-                        "apiVersion": "2019-06-01",
-                        "name": "[variables('mspRegistrationName')]",
-                        "properties": {
-                            "registrationDefinitionName": "[variables('mspOfferName')]",
-                            "description": "[variables('mspOfferDescription')]",
-                            "managedByTenantId": "[variables('managedByTenantId')]",
-                            "authorizations": "[variables('authorizations')]"
-                        }
-                    },
-                    {
-                        "type": "Microsoft.ManagedServices/registrationAssignments",
-                        "apiVersion": "2019-06-01",
-                        "name": "[variables('mspAssignmentName')]",
-                        "dependsOn": [
-                            "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]"
-                        ],
-                        "properties": {
-                            "registrationDefinitionId": "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]"
-                        }
-                    }
-                ]
             }
         }
     }
