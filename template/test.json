@@ -180,27 +180,42 @@
             }
         },
         {
-            "type": "Microsoft.ManagedServices/registrationDefinitions",
-            "apiVersion": "2019-06-01",
-            "name": "[variables('mspRegistrationName')]",
-            "properties": {
-                "registrationDefinitionName": "[variables('mspOfferName')]",
-                "description": "[variables('mspOfferDescription')]",
-                "managedByTenantId": "[variables('managedByTenantId')]",
-                "authorizations": "[variables('authorizations')]"
-            }
-        },
-        {
-            "type": "Microsoft.ManagedServices/registrationAssignments",
-            "apiVersion": "2019-06-01",
-            "name": "[variables('mspAssignmentName')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]"
-            ],
-            "properties": {
-                "registrationDefinitionId": "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]"
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2019-10-01",
+        "name": "lighthouse",
+        "subscriptionId": "[subscription().id]",
+        "properties": {
+            "mode": "Incremental",
+            "template": {
+                "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                    {
+                        "type": "Microsoft.ManagedServices/registrationDefinitions",
+                        "apiVersion": "2019-06-01",
+                        "name": "[variables('mspRegistrationName')]",
+                        "properties": {
+                            "registrationDefinitionName": "[variables('mspOfferName')]",
+                            "description": "[variables('mspOfferDescription')]",
+                            "managedByTenantId": "[variables('managedByTenantId')]",
+                            "authorizations": "[variables('authorizations')]"
+                        }
+                    },
+                    {
+                        "type": "Microsoft.ManagedServices/registrationAssignments",
+                        "apiVersion": "2019-06-01",
+                        "name": "[variables('mspAssignmentName')]",
+                        "dependsOn": [
+                            "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]"
+                        ],
+                        "properties": {
+                            "registrationDefinitionId": "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]"
+                        }
+                    }
+                ]
             }
         }
+    }
     ],
     "outputs": {
         "customerName": {
