@@ -5,8 +5,8 @@
     "variables": {
         "mspRegistrationName": "[guid(variables('mspOfferName'))]",
         "mspAssignmentName": "[guid(variables('mspOfferName'))]",
-        "mspOfferName": "Truveta Lighthouse Delegation - Base",
-        "mspOfferDescription": "Base Delegations for Truveta. Applies to Embassy, Production, and Shipping tenants",
+        "mspOfferName": "Punch Test Lighthouse Delegation - Base",
+        "mspOfferDescription": "Base Delegations for Punch Test. Applies to Embassy, Production, and Shipping tenants",
         "managedByTenantId": "6f86640f-d181-45f5-a607-8856179c0a1c",
         "authorizations": [
             {
