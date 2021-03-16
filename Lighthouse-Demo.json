@@ -1,0 +1,58 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {
+        "mspRegistrationName": "[guid(variables('mspOfferName'))]",
+        "mspAssignmentName": "[guid(variables('mspOfferName'))]",
+        "mspOfferName": "Truveta Lighthouse Delegation - Base",
+        "mspOfferDescription": "Base Delegations for Truveta. Applies to Embassy, Production, and Shipping tenants",
+        "managedByTenantId": "6f86640f-d181-45f5-a607-8856179c0a1c",
+        "authorizations": [
+            {
+                "principalId": "5e471c93-cd19-4524-88b1-ba3c37057674",
+                "principalIdDisplayName": "Lighthouse-Delegation",
+                "roleDefinitionId": "ab8e14d6-4a74-4a29-9ba8-549422addade"
+            },
+            {	
+                "principalId": "5e471c93-cd19-4524-88b1-ba3c37057674",	
+                "principalIdDisplayName": "Lighthouse-Delegation",	
+                "roleDefinitionId": "fb1c8493-542b-48eb-b624-b4c8fea62acd"
+            }
+        ]
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ManagedServices/registrationDefinitions",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('mspRegistrationName')]",
+            "properties": {
+                "registrationDefinitionName": "[variables('mspOfferName')]",
+                "description": "[variables('mspOfferDescription')]",
+                "managedByTenantId": "[variables('managedByTenantId')]",
+                "authorizations": "[variables('authorizations')]"
+            }
+        },
+        {
+            "type": "Microsoft.ManagedServices/registrationAssignments",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('mspAssignmentName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]"
+            ],
+            "properties": {
+                "registrationDefinitionId": "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]"
+            }
+        }
+    ],
+    "outputs": {
+        "mspOfferName": {
+            "type": "string",
+            "value": "[concat('Managed by', ' ', variables('mspOfferName'))]"
+        },
+        "authorizations": {
+            "type": "array",
+            "value": "[variables('authorizations')]"
+        }
+    }
+}
