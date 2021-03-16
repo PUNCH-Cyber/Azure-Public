@@ -6,7 +6,7 @@
         "mspRegistrationName": "[guid(variables('mspOfferName'))]",
         "mspAssignmentName": "[guid(variables('mspOfferName'))]",
         "mspOfferName": "Punch Test Lighthouse Delegation - Base",
-        "mspOfferDescription": "Base Delegations for Punch Test. Applies to Embassy, Production, and Shipping tenants",
+        "mspOfferDescription": "Base Delegations for Punch Test",
         "managedByTenantId": "6f86640f-d181-45f5-a607-8856179c0a1c",
         "authorizations": [
             {
@@ -18,7 +18,18 @@
                 "principalId": "5e471c93-cd19-4524-88b1-ba3c37057674",	
                 "principalIdDisplayName": "Lighthouse-Delegation",	
                 "roleDefinitionId": "fb1c8493-542b-48eb-b624-b4c8fea62acd"
-            }
+            },
+            {	
+                "principalId": "5e471c93-cd19-4524-88b1-ba3c37057674",	
+                "principalIdDisplayName": "Lighthouse-Delegation",	
+                "roleDefinitionId": "acdd72a7-3385-48ef-bd42-f606fba81ae7"
+            },
+            {	
+                "principalId": "5e471c93-cd19-4524-88b1-ba3c37057674",	
+                "principalIdDisplayName": "Lighthouse-Delegation",	
+                "roleDefinitionId": "91c1777a-f3dc-4fae-b103-61d183457e46"
+            },
+            
         ]
     },
     "resources": [
