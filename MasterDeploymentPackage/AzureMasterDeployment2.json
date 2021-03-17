@@ -139,9 +139,11 @@
             }
         },
         {
-            "dependsOn": "workspaceCreation",
             "type": "Microsoft.Resources/deploymentScripts",
             "resourceGroup": "[variables('ingestionRGName')]", 
+            "dependsOn": [
+                "workspaceCreation"
+            ],
             "apiVersion": "2020-10-01",
             "name": "sleep",
             "location": "[parameters('location')]",
