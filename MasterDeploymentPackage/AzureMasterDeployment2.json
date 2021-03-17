@@ -139,35 +139,13 @@
             }
         },
         {
-            "type": "Microsoft.Resources/deploymentScripts",
-            "resourceGroup": "[variables('ingestionRGName')]", 
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups',variables('sentienlRGName'))]"
-            ],
-            "apiVersion": "2020-10-01",
-            "name": "sleep",
-            "location": "[parameters('location')]",
-            "kind": "AzurePowerShell",
-            "properties": {
-                "forceUpdateTag": "1",
-                "azPowerShellVersion": "3.0",
-                "arguments": "",
-                "scriptContent": "Start-Sleep -Seconds 120",
-                "supportingScriptUris": [],
-                "timeout": "PT30M",
-                "cleanupPreference": "Always",
-                "retentionInterval": "P1D"
-            }
-        },
-        {
             "condition": "[parameters('enableSyslog')]",
             "name": "enableSyslog",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
             "resourceGroup": "[variables('ingestionRGName')]",
             "dependsOn": [
-                "sleep",
-                "workspaceCreation",
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]",
                 "[resourceId('Microsoft.Resources/resourceGroups',variables('ingestionRGName'))]"
             ],
             "properties": {
@@ -205,8 +183,7 @@
             "apiVersion": "2020-06-01",
             "resourceGroup": "[variables('ingestionRGName')]",
             "dependsOn": [
-                "sleep",
-                "workspaceCreation",
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]",
                 "[resourceId('Microsoft.Resources/resourceGroups',variables('ingestionRGName'))]"
             ],
             "properties": {
@@ -247,8 +224,7 @@
             "apiVersion": "2020-06-01",
             "resourceGroup": "[variables('ingestionRGName')]",
             "dependsOn": [
-                "sleep",
-                "workspaceCreation",
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]",
                 "[resourceId('Microsoft.Resources/resourceGroups',variables('ingestionRGName'))]"
             ],
             "properties": {
