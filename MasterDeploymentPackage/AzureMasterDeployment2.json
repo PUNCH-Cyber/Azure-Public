@@ -27,7 +27,8 @@
             "type": "securestring",
             "metadata": {
                 "description": "Specify a VM Password"
-            }
+            },
+            "defaultValue": ""
         },
         "enableCS": {
             "type": "bool",
@@ -38,13 +39,14 @@
             "metadata": {
                 "description": "Specify the CS API ID"
             },
-            "defaultValue": "vm-adm"
+            "defaultValue": ""
         },
         "CSAPIKEY": {
             "type": "securestring",
             "metadata": {
                 "description": "Specify the CS API Key"
-            }
+            },
+            "defaultValue": ""
         },
         "enableQualys": {
             "type": "bool",
@@ -61,13 +63,15 @@
             "type": "string",
             "metadata": {
                 "description": "Specify the Qualys Username"
-            }
+            },
+            "defaultValue": ""
         },
         "qualysPass": {
             "type": "securestring",
             "metadata": {
                 "description": "Specify the Qualys Password"
-            }
+            },
+            "defaultValue": ""
         }
     },
     "variables": {
