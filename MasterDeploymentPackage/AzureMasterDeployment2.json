@@ -142,7 +142,6 @@
             "type": "Microsoft.Resources/deploymentScripts",
             "resourceGroup": "[variables('ingestionRGName')]", 
             "dependsOn": [
-                "workspaceCreation",
                 "[resourceId('Microsoft.Resources/resourceGroups',variables('sentienlRGName'))]"
             ],
             "apiVersion": "2020-10-01",
