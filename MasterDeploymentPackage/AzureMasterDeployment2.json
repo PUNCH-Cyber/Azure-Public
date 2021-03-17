@@ -139,7 +139,7 @@
             }
         },
         {
-            "condition": "[not(empty(parameters('enableSyslog')))]",
+            "condition": "[parameters('enableSyslog')]",
             "name": "enableSyslog",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
@@ -177,7 +177,7 @@
             }
         },
         {
-            "condition": "[not(empty(parameters('enableCS')))]",
+            "condition": "[parameters('enableCS')]",
             "name": "enableCS",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
@@ -218,7 +218,7 @@
             }
         },
         {
-            "condition": "[not(empty(parameters('enableQualys')))]",
+            "condition": "[parameters('enableQualys')]",
             "name": "enableQualys",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
