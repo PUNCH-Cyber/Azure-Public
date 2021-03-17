@@ -28,7 +28,7 @@
             "metadata": {
                 "description": "Specify a VM Password"
             },
-            "defaultValue": ""
+            "defaultValue": "foo"
         },
         "enableCS": {
             "type": "bool",
