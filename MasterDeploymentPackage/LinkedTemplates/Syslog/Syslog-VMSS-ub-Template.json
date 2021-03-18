@@ -19,12 +19,6 @@
         },
         "VMAdminPassword": {
             "type": "securestring"
-        },
-        "workspaceId": {
-            "type": "string"
-        },
-        "workspaceKey": {
-            "type": "string"
         }
     },
     "variables": {
