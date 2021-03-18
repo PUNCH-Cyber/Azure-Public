@@ -173,10 +173,10 @@
                             "value": "[parameters('VMAdminPassword')]"
                     },
                     "workspaceId": {
-                        "value": "[reference(resourceId(variables('subId'), variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
+                        "value": "[reference(resourceId(variables('subId'), variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces', parameters('customerName')), '2015-11-01-preview').customerId]"
                     },
                     "workspaceKey":{
-                        "value": "[listKeys(resourceId(variables('subId'), variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
+                        "value": "[listKeys(resourceId(variables('subId'), variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
                     }
                 }
             }
