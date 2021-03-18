@@ -270,11 +270,11 @@
         },
         "workspaceId": {
             "type": "string",
-            "value": "[variables('workspaceId')]"
+            "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
         },
         "workspaceKey": {
             "type": "string",
-            "value": "[variables('workspaceKey')]"
+            "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
         }
     }
 }
