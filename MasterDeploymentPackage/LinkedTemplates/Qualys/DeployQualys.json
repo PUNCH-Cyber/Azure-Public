@@ -32,6 +32,9 @@
             "metadata": {
                 "description": "The name given to the data table in Azure Sentinel"
             }
+        },
+        "location": {
+            "type": "string"
         }
     },
     "variables": {
@@ -47,7 +50,7 @@
             "type": "Microsoft.Resources/deploymentScripts",
             "apiVersion": "2020-10-01",
             "name": "Qualys_Sentinel_IntegrationScript",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "kind": "AzurePowerShell",
             "properties": {
                 "forceUpdateTag": "1",
