@@ -82,7 +82,9 @@
         "immediatePurgeDataOn30Days": true,
         "dataRetention": 30,
         "dailyQuota": 0,
-        "pricingTier": "PerGB2018"
+        "pricingTier": "PerGB2018",
+        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]",
+        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
     },
     "resources": [
         {
@@ -150,6 +152,7 @@
             "resourceGroup": "[variables('ingestionRGName')]",
             "dependsOn": [
                 "workspaceCreation",
+                "[variables('ingestionRGName')]",
                 "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
             ],
             "properties": {
@@ -172,10 +175,10 @@
                             "value": "[parameters('VMAdminPassword')]"
                     },
                     "workspaceId": {
-                        "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
+                        "value": "[variables('workspaceId')]"
                     },
                     "workspaceKey":{
-                        "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
+                        "value": "[variables('workspaceKey')]"
                     }
                 }
             }
@@ -188,6 +191,7 @@
             "resourceGroup": "[variables('ingestionRGName')]",
             "dependsOn": [
                 "workspaceCreation",
+                "[variables('ingestionRGName')]",
                 "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
             ],
             "properties": {
@@ -229,6 +233,7 @@
             "resourceGroup": "[variables('ingestionRGName')]",
             "dependsOn": [
                 "workspaceCreation",
+                "[variables('ingestionRGName')]",
                 "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
             ],
             "properties": {
@@ -264,9 +269,17 @@
         }
     ],
     "outputs": {
-        "workspaceName": {
+        "customerName": {
             "type": "string",
             "value": "[parameters('customerName')]"
+        },
+        "workspaceId": {
+            "type": "string",
+            "value": "[variables('workspaceId')]"
+        },
+        "workspaceKey": {
+            "type": "string",
+            "value": "[variables('workspaceKey')]"
         }
     }
 }
