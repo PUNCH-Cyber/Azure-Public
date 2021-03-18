@@ -19,6 +19,9 @@
         },
         "VMAdminPassword": {
             "type": "securestring"
+        },
+        "location": {
+            "type": "string"
         }
     },
     "variables": {
@@ -41,7 +44,7 @@
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-06-01",
             "name": "[variables('storage_name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "sku": {
                 "name": "Standard_LRS",
                 "tier": "Standard"
@@ -55,7 +58,7 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2019-09-01",
             "name": "[variables('nsg_Name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "properties": {
                 "securityRules": [
                     {
@@ -112,7 +115,7 @@
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-11-01",
             "name": "[variables('vnet_Name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_Name'))]"
             ],
@@ -169,7 +172,7 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2019-09-01",
             "name": "[variables('PIP_Name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "sku": {
                 "name": "Standard"
             },
@@ -186,7 +189,7 @@
             "type": "Microsoft.Network/loadBalancers",
             "apiVersion": "2019-09-01",
             "name": "[variables('loadbalancer_Name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', variables('pip_Name'))]"
             ],
@@ -297,7 +300,7 @@
             "type": "Microsoft.Compute/virtualMachineScaleSets",
             "apiVersion": "2019-03-01",
             "name": "[variables('vmss_Name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_Name'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storage_name'))]",
@@ -412,7 +415,7 @@
             "type": "microsoft.insights/autoscalesettings",
             "apiVersion": "2014-04-01",
             "name": "[variables('autoscale_Name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Compute/virtualMachineScaleSets', variables('vmss_Name'))]"
             ],
