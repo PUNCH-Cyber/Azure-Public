@@ -82,8 +82,7 @@
         "immediatePurgeDataOn30Days": true,
         "dataRetention": 30,
         "dailyQuota": 0,
-        "pricingTier": "PerGB2018",
-        "subId": "[subscription().id]"
+        "pricingTier": "PerGB2018"
     },
     "resources": [
         {
@@ -250,14 +249,6 @@
         "customerName": {
             "type": "string",
             "value": "[parameters('customerName')]"
-        },
-        "workspaceId": {
-            "type": "string",
-            "value": "[reference(resourceId(variables('subId'), variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
-        },
-        "workspaceKey": {
-            "type": "string",
-            "value": "[listKeys(resourceId(variables('subId'), variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
         }
     }
 }
