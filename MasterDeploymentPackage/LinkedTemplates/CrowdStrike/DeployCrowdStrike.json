@@ -38,20 +38,6 @@
             "metadata": {
                 "description": "CS API Secret"
             }
-        },
-        "workspaceIDOutput": {
-            "type": "string",
-            "defaultValue": null,
-            "metadata": {
-                "description": "The Log Analytics or Azure Sentinel workspace ID"
-            }
-        },
-        "workspaceKeyOutput": {
-            "type": "securestring",
-            "defaultValue": null,
-            "metadata": {
-                "description": "The Log Analytics or Azure Sentinel workspace key"
-            }
         }
     },
     "variables": {
@@ -61,6 +47,10 @@
         "nsg_Name": "[concat(parameters('customerName'),'-CrowdStrike-NSG')]",
         "vnet_Name": "[concat(parameters('customerName'), '-CrowdStrike-VNet')]",
         "pip_Name": "[concat(parameters('customerName'),'CrowdStrike-PIP')]",
+        "subId": "[subscription().id]",
+        "SentinelRG": "[concat(parameters('customerName'), '-Senitnel')]",
+        "workspaceIdOutput": "[reference(resourceId(variables('subId'), variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]",
+        "workspaceKeyOutput": "[listKeys(resourceId(variables('subId'), variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces', parameters('customerName')), '2015-11-01-preview').primarySharedKey]",
         "cloudinit": "[concat(#cloud-config\nruncmd:\n  - sudo apt update && apt upgrade -y\n  - sudo wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w ', parameters('workspaceIDOutput'), ' -s ', parameters('workspaceKeyOutput'), '\n  - sudo mkdir /etc/opt/microsoft/omsagent/', parameters('workspaceIDOutput'), '/conf/omsagent.d/crowdstrike\n  - sudo wget -O /etc/opt/microsoft/omsagent/', parameters('workspaceIDOutput'), '/conf/omsagent.d/crowdstrike/crowdstrike_read_log.sh https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/MasterDeploymentPackage/LinkedTemplates/CrowdStrike/crowdstrike_read_log.sh\n  - sudo wget -O /etc/opt/microsoft/omsagent/', parameters('workspaceIDOutput'), '/conf/omsagent.d/crowdstrike_json.conf https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/MasterDeploymentPackage/LinkedTemplates/CrowdStrike/crowdstrike_json.conf\n  - sudo sed -i -e 's/OMSGENTSID/', parameters('workspaceIDOutput'), '/g' /etc/opt/microsoft/omsagent/conf/omsagent.d/crowdstrike_json.conf\n  - sudo chown -R omsagent.omiusers /etc/opt/microsoft/omsagent/', parameters('workspaceIDOutput'), '/conf/omsagent.d/crowdstrike\n  - sudo chown omsagent.omiusers /etc/opt/microsoft/omsagent/', parameters('workspaceIDOutput'), '/conf/omsagent.d/crowdstrike_json.conf\n  - sudo chmod 740 /etc/opt/microsoft/omsagent/', parameters('workspaceIDOutput'), '/conf/omsagent.d/crowdstrike/crowdstrike_read_log.sh\n  - sudo wget https://github.com/PUNCH-Cyber/Azure-Public/raw/main/CrowdStrike-VM/CS-SIEM-Tool-24.deb\n  - sudo dpkg -i CS-SIEM-Tool-24.deb\n  - sudo systemctl stop cs.falconhoseclientd.service\n  - sudo sed -i -e 's/client_id =/client_id = ', parameters('crowdstrikeId'), '/g' /opt/crowdstrike/etc/cs.falconhoseclient.cfg\n  - sudo sed -i -e 's/client_secret =/client_secret = ', parameters('crowdstrikeSecret'), '/g' /opt/crowdstrike/etc/cs.falconhoseclient.cfg\n  - sudo groupadd csoms-group\n  - sudo usermod -a -G csoms-group daemon \n  - sudo usermod -a -G csoms-group omsagent\n  - sudo chgrp -R csoms-group /var/log/crowdstrike/falconhoseclient\n  - sudo chmod g+rw /var/log/crowdstrike/falconhoseclient\n  - sudo systemctl restart omsagent-', parameters('workspaceIDOutput'), '.service\n  - sudo systemctl start cs.falconhoseclientd.service)]"
     },
     "resources": [
