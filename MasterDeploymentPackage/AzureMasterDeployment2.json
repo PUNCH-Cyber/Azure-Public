@@ -194,6 +194,9 @@
                     "customerName": {
                         "value": "[parameters('customerName')]"
                     },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
                     "VMAdminUserName": {
                             "value": "[parameters('VMAdminUserName')]"
                     },
