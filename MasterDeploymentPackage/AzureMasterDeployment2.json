@@ -172,10 +172,10 @@
                             "value": "[parameters('VMAdminPassword')]"
                     },
                     "workspaceId": {
-                        "value": "[reference(resourceId(variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
+                        "value": "[reference(resourceId(subscription().id, variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
                     },
                     "workspaceKey":{
-                        "value": "[listKeys(resourceId(variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
+                        "value": "[listKeys(resourceId(subscription().id, variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
                     }
                 }
             }
@@ -207,10 +207,10 @@
                             "value": "[parameters('VMAdminPassword')]"
                     },
                     "workspaceIdOutput": {
-                        "value": "[reference(resourceId(variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
+                        "value": "[reference(resourceId(subscription().id, variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
                     },
                     "workspaceKeyOutput":{
-                        "value": "[listKeys(resourceId(variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
+                        "value": "[listKeys(resourceId(subscription().id, variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
                     },
                     "crowdstrikeId": {
                         "value": "[parameters('CSAPIID')]"
@@ -245,10 +245,10 @@
                                 "value": "[parameters('location')]"
                     },
                     "workspaceIdOutput": {
-                        "value": "[reference(resourceId(variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
+                        "value": "[reference(resourceId(subscription().id, variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
                     },
                     "workspaceKeyOutput":{
-                        "value": "[listKeys(resourceId(variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
+                        "value": "[listKeys(resourceId(subscription().id, variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
                     },
                     "QualysInstanceURL": {
                         "value": "[parameters('qualysURL')]"
@@ -270,11 +270,11 @@
         },
         "workspaceId": {
             "type": "string",
-            "value": "[reference(resourceId(variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
+            "value": "[reference(resourceId(subscription().id, variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
         },
         "workspaceKey": {
             "type": "string",
-            "value": "[listKeys(resourceId(variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
+            "value": "[listKeys(resourceId(subscription().id, variables('sentienlRGName'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
         }
     }
 }
