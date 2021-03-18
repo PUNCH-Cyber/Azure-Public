@@ -150,7 +150,7 @@
             "resourceGroup": "[variables('ingestionRGName')]",
             "dependsOn": [
                 "workspaceCreation",
-                "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -188,7 +188,7 @@
             "resourceGroup": "[variables('ingestionRGName')]",
             "dependsOn": [
                 "workspaceCreation",
-                "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -229,7 +229,7 @@
             "resourceGroup": "[variables('ingestionRGName')]",
             "dependsOn": [
                 "workspaceCreation",
-                "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
