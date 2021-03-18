@@ -38,6 +38,9 @@
             "metadata": {
                 "description": "CS API Secret"
             }
+        },
+        "location": {
+            "type": "string"
         }
     },
     "variables": {
@@ -75,7 +78,7 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2019-09-01",
             "name": "[variables('nsg_Name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "properties": {
                 "securityRules": [
                     {
@@ -106,7 +109,7 @@
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-11-01",
             "name": "[variables('vnet_Name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_Name'))]"
             ],
