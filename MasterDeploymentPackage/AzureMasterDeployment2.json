@@ -82,9 +82,7 @@
         "immediatePurgeDataOn30Days": true,
         "dataRetention": 30,
         "dailyQuota": 0,
-        "pricingTier": "PerGB2018",
-        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]",
-        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
+        "pricingTier": "PerGB2018"
     },
     "resources": [
         {
@@ -152,8 +150,7 @@
             "resourceGroup": "[variables('ingestionRGName')]",
             "dependsOn": [
                 "workspaceCreation",
-                "[variables('ingestionRGName')]",
-                "[variables('workspaceId')]"
+                "[variables('ingestionRGName')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -175,10 +172,10 @@
                             "value": "[parameters('VMAdminPassword')]"
                     },
                     "workspaceId": {
-                        "value": "[variables('workspaceId')]"
+                        "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]"
                     },
                     "workspaceKey":{
-                        "value": "[variables('workspaceKey')]"
+                        "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').primarySharedKey]"
                     }
                 }
             }
@@ -191,8 +188,7 @@
             "resourceGroup": "[variables('ingestionRGName')]",
             "dependsOn": [
                 "workspaceCreation",
-                "[variables('ingestionRGName')]",
-                "[variables('workspaceId')]"
+                "[variables('ingestionRGName')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -233,8 +229,7 @@
             "resourceGroup": "[variables('ingestionRGName')]",
             "dependsOn": [
                 "workspaceCreation",
-                "[variables('ingestionRGName')]",
-                "[variables('workspaceId')]"
+                "[variables('ingestionRGName')]"
             ],
             "properties": {
                 "mode": "Incremental",
