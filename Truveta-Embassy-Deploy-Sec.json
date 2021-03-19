@@ -253,7 +253,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "name": "lighthouseRegistrationAssignments",
-            "location": "[variable('location')]",
+            "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]",
                 "[resourceId('Microsoft.Resources/resourceGroups',variables('sentienlRGName'))]"
