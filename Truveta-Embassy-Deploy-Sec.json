@@ -25,7 +25,7 @@
         "enableMLAlerts": true,
         "enableScheduledAlerts": true,
         "mcasDiscoveryLogs": false,
-        "_artifactsLocation": "https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Tools/Sentinel-All-In-One/",
+        "_artifactsLocation": "https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Tools/",
         "location": "eastus",
         "sentienlRGName": "[concat(parameters('customerName'), '-Senitnel')]",
         "mspRegistrationName": "[guid(variables('mspOfferName'))]",
