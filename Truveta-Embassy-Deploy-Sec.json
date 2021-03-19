@@ -30,7 +30,7 @@
         "sentienlRGName": "[concat(parameters('customerName'), '-Senitnel')]",
         "mspRegistrationName": "[guid(variables('mspOfferName'))]",
         "mspAssignmentName": "[guid(variables('mspOfferName'))]",
-        "mspOfferName": "Truveta Lighthouse Delegation - Security Responder",
+        "mspOfferName": "Truveta Lighthouse Delegation - Security Responder2",
         "mspOfferDescription": "Security Responder delegations for Truveta. Applies to Embassy, Production, and Shipping tenants",
         "managedByTenantId": "f7ca9621-6ba3-4d52-a241-e0ed3ea6a78a",
         "authorizations": [
