@@ -64,8 +64,7 @@
                 "principalIdDisplayName": "Lighthouse-Security-Responders",
                 "roleDefinitionId": "91c1777a-f3dc-4fae-b103-61d183457e46"
             }
-        ],
-        "workspaceResourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourcegroups/', variables('sentienlRGName'), '/providers/microsoft.operationalinsights/workspaces/', parameters('customerName'))]"
+        ]
     },
     "resources": [
         {
