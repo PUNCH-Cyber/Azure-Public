@@ -58,8 +58,14 @@
                 "principalId": "58cec7a7-49c7-429e-93ac-244baeb52796",
                 "principalIdDisplayName": "Lighthouse-Security-Responders",
                 "roleDefinitionId": "39bc4728-0917-49c7-9d2c-d95423bc2eb4"
+            },
+            {
+                "principalId": "58cec7a7-49c7-429e-93ac-244baeb52796",
+                "principalIdDisplayName": "Lighthouse-Security-Responders",
+                "roleDefinitionId": "91c1777a-f3dc-4fae-b103-61d183457e46"
             }
-        ]
+        ],
+        "workspaceResourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourcegroups/', variables('sentienlRGName'), '/providers/microsoft.operationalinsights/workspaces/', parameters('customerName'))]"
     },
     "resources": [
         {
@@ -101,6 +107,28 @@
                     },
                     "location": {
                         "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "workspaceCreation",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups',variables('sentienlRGName'))]",
+                "workspaceCreation"
+            ],
+            "resourceGroup": "[variables('sentienlRGName')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(variables('_artifactsLocation'), 'ARM-Templates/DataConnectors/AzureAD/AzureAD.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspaceResourceId": {
+                        "value": "[variables('workspaceResourceId')]"
                     }
                 }
             }
