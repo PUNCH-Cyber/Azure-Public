@@ -112,28 +112,6 @@
             }
         },
         {
-            "name": "AADDiagLogging",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups',variables('sentienlRGName'))]",
-                "workspaceCreation"
-            ],
-            "resourceGroup": "[variables('sentienlRGName')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'ARM-Templates/DataConnectors/AzureAD/AzureAD.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "workspaceResourceId": {
-                        "value": "[variables('workspaceResourceId')]"
-                    }
-                }
-            }
-        },
-        {
             "condition": "[not(empty(variables('enableDataConnectorsKind')))]",
             "name": "enableDataConnectorsKind",
             "type": "Microsoft.Resources/deployments",
