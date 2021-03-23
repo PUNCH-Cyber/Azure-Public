@@ -252,6 +252,14 @@
         "customerName": {
             "type": "string",
             "value": "[parameters('customerName')]"
+        },
+        "workspaceId": {
+            "type": "string",
+            "value": "[reference(resourceId(variables('subId'), variables('SentinelRG'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]",
+        },
+        "workspaceKey": {
+            "type": "string"
+            "value": "[listKeys(resourceId(variables('subId'), variables('SentinelRG'), 'Microsoft.OperationalInsights/workspaces', parameters('customerName')), '2015-11-01-preview').primarySharedKey]",
         }
     }
 }
