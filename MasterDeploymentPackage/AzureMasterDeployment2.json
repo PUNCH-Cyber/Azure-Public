@@ -83,7 +83,7 @@
         "dataRetention": 30,
         "dailyQuota": 0,
         "pricingTier": "PerGB2018",
-        "subId": "[subscription().id]"
+        "subId": "[subscription().subscriptionId]"
     },
     "resources": [
         {
