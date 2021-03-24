@@ -50,7 +50,7 @@
         "nsg_Name": "[concat(parameters('customerName'),'-CrowdStrike-NSG')]",
         "vnet_Name": "[concat(parameters('customerName'), '-CrowdStrike-VNet')]",
         "pip_Name": "[concat(parameters('customerName'),'CrowdStrike-PIP')]",
-        "subId": "[subscription().id]",
+        "subId": "[subscription().subscriptionId]",
         "SentinelRG": "[concat(parameters('customerName'), '-Senitnel')]",
         "workspaceIdOutput": "[reference(resourceId(variables('subId'), variables('SentinelRG'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]",
         "workspaceKeyOutput": "[listKeys(resourceId(variables('subId'), variables('SentinelRG'), 'Microsoft.OperationalInsights/workspaces', parameters('customerName')), '2015-11-01-preview').primarySharedKey]",
