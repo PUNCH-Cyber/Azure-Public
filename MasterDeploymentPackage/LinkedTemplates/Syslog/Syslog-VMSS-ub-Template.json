@@ -33,7 +33,7 @@
         "autoscale_Name": "[concat(parameters('customerName'),'-Syslog-AutoScale')]",
         "loadbalancer_Name": "[concat(parameters('customerName'),'-Syslog-LB')]",
         "maxPortRange": "[if(lessOrEquals(parameters('Autoscale_Max'), 9), '5000', '500')]",
-        "subId": "[subscription().id]",
+        "subId": "[subscription().subscriptionId]",
         "SentinelRG": "[concat(parameters('customerName'), '-Senitnel')]",
         "workspaceId": "[reference(resourceId(variables('subId'), variables('SentinelRG'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]",
         "workspaceKey": "[listKeys(resourceId(variables('subId'), variables('SentinelRG'), 'Microsoft.OperationalInsights/workspaces', parameters('customerName')), '2015-11-01-preview').primarySharedKey]",
