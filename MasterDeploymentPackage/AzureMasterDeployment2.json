@@ -75,7 +75,7 @@
         }
     },
     "variables": {
-        "sentienlRGName": "[concat(parameters('customerName'), '-Senitnel')]",
+        "sentienlRGName": "[concat(parameters('customerName'), '-Sentinel')]",
         "ingestionRGName": "[concat(parameters('customerName'), '-Ingestion')]",
         "resourcesRGName": "[concat(parameters('customerName'), '-Resources')]",
         "_artifactsLocation": "https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/MasterDeploymentPackage/",
