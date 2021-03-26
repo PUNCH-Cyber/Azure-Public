@@ -41,7 +41,7 @@
         "authinfo" : "[base64(concat(parameters('QualysUsername'),':',parameters('QualysPassword')))]",
         "integrationName": "[toLower(concat(parameters('customerName'),'-SentinelIntegration'))]",
         "subId": "[subscription().id]",
-        "SentinelRG": "[concat(parameters('customerName'), '-Senitnel')]",
+        "SentinelRG": "[concat(parameters('customerName'), '-Sentinel')]",
         "workspaceIdOutput": "[reference(resourceId(variables('subId'), variables('SentinelRG'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId]",
         "workspaceKeyOutput": "[listKeys(resourceId(variables('subId'), variables('SentinelRG'), 'Microsoft.OperationalInsights/workspaces', parameters('customerName')), '2015-11-01-preview').primarySharedKey]",
     },
