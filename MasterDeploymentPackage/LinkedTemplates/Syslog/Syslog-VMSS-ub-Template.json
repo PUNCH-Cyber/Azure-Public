@@ -34,7 +34,7 @@
         "loadbalancer_Name": "[concat(parameters('customerName'),'-Syslog-LB')]",
         "maxPortRange": "[if(lessOrEquals(parameters('Autoscale_Max'), 9), '5000', '500')]",
         "subId": "[subscription().subscriptionId]",
-        "SentinelRG": "[concat(parameters('customerName'), '-Senitnel')]"
+        "SentinelRG": "[concat(parameters('customerName'), '-Sentinel')]"
    },
     "resources": [
         {
