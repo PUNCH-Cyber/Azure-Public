@@ -55,7 +55,7 @@
             "properties": {
                 "forceUpdateTag": "1",
                 "azPowerShellVersion": "3.0",
-                "arguments": "[format('-workspaceId {0} -workspaceKey {1} -qualysInstanceURL {2} -qualysAuthInfo {3} -integrationName {4} -sentinelTableName {5}', parameters('WorkspaceIDOutput'), parameters('WorkspaceKeyOutput'), parameters('QualysInstanceURL'), variables('authinfo'), parameters('integrationName'), parameters('SentinelTableName'))]",
+                "arguments": "[format('-workspaceId {0} -workspaceKey {1} -qualysInstanceURL {2} -qualysAuthInfo {3} -integrationName {4} -sentinelTableName {5}', reference(resourceId(variables('subId'), variables('SentinelRG'), 'Microsoft.OperationalInsights/workspaces/', parameters('customerName')), '2015-11-01-preview').customerId, listKeys(resourceId(variables('subId'), variables('SentinelRG'), 'Microsoft.OperationalInsights/workspaces', parameters('customerName')), '2015-11-01-preview').primarySharedKey, parameters('QualysInstanceURL'), variables('authinfo'), parameters('integrationName'), parameters('SentinelTableName'))]",
                 "primaryScriptURI": "https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/MasterDeploymentPackage/LinkedTemplates/Qualys/qualys_addsentinelintegration.ps1",
                 "supportingScriptUris": [],
                 "timeout": "PT30M",
