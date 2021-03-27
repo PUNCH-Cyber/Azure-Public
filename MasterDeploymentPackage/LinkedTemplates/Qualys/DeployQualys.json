@@ -9,14 +9,14 @@
                 "description": "The Qualys instance URL"
             }
         },
-        "qualysUser": {
+        "QualysUsername": {
             "type": "securestring",
             "defaultValue": null,           
             "metadata": {
                 "description": "The Qualys Account Username"
             }
         },
-        "qualysPass": {
+        "QualysPassword": {
             "type": "securestring",
             "defaultValue": null,           
             "metadata": {
