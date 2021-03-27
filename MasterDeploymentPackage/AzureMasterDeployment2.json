@@ -239,10 +239,10 @@
                     "QualysInstanceURL": {
                         "value": "[parameters('qualysURL')]"
                     },
-                    "qualysUser": {
+                    "QualysUsername": {
                         "value": "[parameters('qualysUser')]"
                     },
-                    "qualysPass": {
+                    "QualysPassword": {
                         "value": "[parameters('qualysPass')]"
                     }
                 }
