@@ -150,7 +150,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('pip_Name'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet_Name'), '/default')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet_Name'), '/subnets/default')]"
                             }
                         }
                     }
