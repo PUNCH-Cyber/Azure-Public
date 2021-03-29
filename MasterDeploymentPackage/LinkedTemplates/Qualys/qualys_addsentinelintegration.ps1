@@ -68,7 +68,8 @@ function AddSentinelIntegration {
 }
 
 ## Main Script
-$headers = @{"Authorization" = "Basic $($qualysAuthInfo)"}
+$headers = @{"Authorization" = "Basic $($qualysAuthInfo)"
+             "Content-Type" = "application/json"}
 
 ## Get Current Integration Settings
 GetIntegrationSettings -QualysInstanceURL $qualysInstanceURL -Headers $headers 
