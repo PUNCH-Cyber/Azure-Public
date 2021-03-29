@@ -40,7 +40,7 @@
     "variables": {
         "authinfo" : "[base64(concat(parameters('QualysUsername'),':',parameters('QualysPassword')))]",
         "integrationName": "[toLower(concat(parameters('customerName'),'-SentinelIntegration'))]",
-        "subId": "[subscription().subscriptionid]",
+        "subId": "[subscription().subscriptionId]",
         "SentinelRG": "[concat(parameters('customerName'), '-Sentinel')]"
     },
     "resources": [
