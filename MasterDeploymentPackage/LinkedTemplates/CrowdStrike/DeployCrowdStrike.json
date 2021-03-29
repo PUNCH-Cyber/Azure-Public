@@ -43,7 +43,9 @@
         "vnet_Name": "[concat(parameters('customerName'), '-CrowdStrike-VNet')]",
         "pip_Name": "[concat(parameters('customerName'),'CrowdStrike-PIP')]",
         "subId": "[subscription().subscriptionId]",
-        "SentinelRG": "[concat(parameters('customerName'), '-Sentinel')]"
+        "SentinelRG": "[concat(parameters('customerName'), '-Sentinel')]",
+        "subnetName": "Subnet",
+        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet_Name'), variables('subnetName'))]"
     },
     "resources": [
         {
@@ -150,7 +152,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('pip_Name'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet_Name'), '/subnets/default')]"
+                                "id": "[variables('subnetRef')]"
                             }
                         }
                     }
