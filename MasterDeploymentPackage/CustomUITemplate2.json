@@ -164,7 +164,7 @@
                         "type": "Microsoft.Common.TextBox",
                         "label": "Qualys URL",
                         "placeholder": "",
-                        "defaultValue": "https://qualysguard.qg2.apps.qualys.com",
+                        "defaultValue": "https://qualysapi.qg2.apps.qualys.com",
                         "toolTip": "This account URL must be granted access to the API platform to work",
                         "constraints": {
                             "required": false
