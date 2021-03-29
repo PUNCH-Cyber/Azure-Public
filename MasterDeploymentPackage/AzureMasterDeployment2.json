@@ -57,7 +57,7 @@
             "metadata": {
                 "description": "Specify the CS API ID"
             },
-            "defaultValue": "https://qualysapi.qg2.apps.qualys.com/"
+            "defaultValue": "https://qualysapi.qg2.apps.qualys.com"
         },
         "qualysUser": {
             "type": "string",
