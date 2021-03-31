@@ -16,6 +16,7 @@ function GetIntegrationSettings {
     )
 
     $getUri = "$QualysInstanceURL/qps/rest/2.0/get/integration/azure/sentinel/vm"
+
     $getResponse = Invoke-RestMethod -Uri $getUri -Method "GET" -Headers $Headers
 
     if ($getResponse.ServiceResponse.responseCode -eq "SUCCESS"){
@@ -40,17 +41,19 @@ function AddSentinelIntegration {
         [string] [Parameter(Mandatory=$true)] $IntegrationName
     )
 
-    $Uri = "$QualysInstanceURL/qps/rest/2.0/get/integration/azure/sentinel/vm"
+    $Uri = "$QualysInstanceURL/qps/rest/2.0/add/integration/azure/sentinel/vm"
+
     $json = @{
-        workspaceId = $WorkspaceId
-        primaryKey = $WorkspaceKey
-        minSeverity = 3
-        baseCategory = "IG"
-        customLogName = $SentinelTableName
-        name = $IntegrationName
+        workspaceId         = $WorkspaceId
+        primaryKey          = $WorkspaceKey
+        minSeverity         = 3
+        baseCategory        = 'IG'
+        customLogName       = $SentinelTableName
+        name                = $IntegrationName
         resultSectionNeeded = false
-        apiVersion = "2016-04-01"
+        apiVersion          = '2016-04-01'
     }
+
     $body = $json | ConvertTo-Json
 
     $response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $body
