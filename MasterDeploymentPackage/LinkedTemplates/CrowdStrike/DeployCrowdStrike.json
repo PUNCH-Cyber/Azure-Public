@@ -170,6 +170,7 @@
                     "vmSize": "Standard_F4s_v2"
                 },
                 "osProfile": {
+                    "computerName": "[variables('vm_Name')]",
                     "adminUsername": "[parameters('VMAdminUserName')]",
                     "adminPassword": "[parameters('VMAdminPassword')]",
                     "linuxConfiguration": {
