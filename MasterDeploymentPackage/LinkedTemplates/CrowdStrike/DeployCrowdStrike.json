@@ -41,7 +41,7 @@
         "nic_Name": "[concat(parameters('customerName'), '-CrowdStrike-NIC')]",
         "nsg_Name": "[concat(parameters('customerName'),'-CrowdStrike-NSG')]",
         "vnet_Name": "[concat(parameters('customerName'), '-CrowdStrike-VNet')]",
-        "pip_Name": "[concat(parameters('customerName'),'CrowdStrike-PIP')]",
+        "pip_Name": "[concat(parameters('customerName'),'-CrowdStrike-PIP')]",
         "subId": "[subscription().subscriptionId]",
         "SentinelRG": "[concat(parameters('customerName'), '-Sentinel')]"
     },
@@ -208,7 +208,7 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "<parentVmResource>/OMSExtension",
+            "name": "[concat(variables('vm_Name'), '-OMSExtention')]",
             "apiVersion": "2018-06-01",
             "location": "[parameters('location')]",
             "dependsOn": [
