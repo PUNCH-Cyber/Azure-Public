@@ -208,7 +208,7 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('vm_Name'), '-DAExtention')]",
+            "name": "[concat(variables('vm_Name'),'/DAExtension')]",
             "apiVersion": "2017-03-30",
             "location": "[parameters('location')]",
             "dependsOn": [
@@ -216,7 +216,7 @@
             ],
             "properties": {
                 "publisher": "Microsoft.Azure.Monitoring.DependencyAgent",
-                "type": "DependencyAgentWindows",
+                "type": "DependencyAgentLinux",
                 "typeHandlerVersion": "9.5",
                 "autoUpgradeMinorVersion": true
             }
