@@ -1,0 +1,219 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "solutionName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name for the Virtual Machine."
+            },
+            "defaultValue": "Ubiquiti"
+        },
+        "VMAdminUserName": {
+            "type": "string",
+            "metadata": {
+                "description": "Username for the Virtual Machine."
+            }
+        },
+        "VMAdminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Password for the Virtual Machine."
+            }
+        },
+        "WorkspaceId": {
+            "type": "string"
+        },
+        "WorkspaceKey": {
+            "type": "securestring"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
+        }
+    },
+    "variables": {
+        "vm_Name": "[concat(parameters('solutionName'), '-VM')]",
+        "nic_Name": "[concat(parameters('solutionName'), '-NIC')]",
+        "nsg_Name": "[concat(parameters('solutionName'),'-NSG')]",
+        "vnet_Name": "[concat(parameters('solutionName'), '-VNet')]",
+        "pip_Name": "[concat(parameters('solutionName'),'-PIP')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2020-05-01",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[variables('pip_Name')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "dnsSettings": {
+                    "domainNameLabel": "[tolower(concat(parameters('solutionName'), 'vm'))]",
+                    "fqdn": "[tolower(concat(parameters('solutionName'), 'vm','.',resourceGroup().location,'.cloudapp.azure.com'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2019-09-01",
+            "name": "[variables('nsg_Name')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "Allow-Syslog-Unifi",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "5514",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1000,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [
+                            ],
+                            "destinationPortRanges": [
+                            ],
+                            "sourceAddressPrefixes": [
+                            ],
+                            "destinationAddressPrefixes": [
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2019-11-01",
+            "name": "[variables('vnet_Name')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_Name'))]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_Name'))]"
+                            },
+                            "serviceEndpoints": [
+                            ],
+                            "delegations": [
+                            ],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [
+                ],
+                "enableDdosProtection": false,
+                "enableVmProtection": false
+            }
+        },
+        {
+            "apiVersion": "2020-05-01",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[variables('nic_Name')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses/', variables('pip_Name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/', variables('vnet_Name'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('pip_Name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet_Name'), 'default')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "2020-06-01",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[variables('vm_Name')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces/', variables('nic_Name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_F4s_v2"
+                },
+                "osProfile": {
+                    "computerName": "[variables('vm_Name')]",
+                    "adminUsername": "[parameters('VMAdminUserName')]",
+                    "adminPassword": "[parameters('VMAdminPassword')]",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "provisionVMAgent": true
+                    },
+                    "secrets": [
+                    ],
+                    "customData": "[base64(concat('#cloud-config\nruncmd:\n  - sudo apt update && apt upgrade -y\n  - sudo wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w ', parameters('WorkspaceId'), ' -s ', parameters('WorkspaceKey'), '\n  - sudo wget -O /etc/rsyslog.d/sentinel.conf https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/Syslog-VMSS/sentinel.conf\n  - sudo sed -i -e ''s/514/5514/g'' /etc/rsyslog.d/sentinel.conf\n  - sudo wget -O /etc/opt/microsoft/omsagent/', parameters('WorkspaceId'), '/conf/omsagent.d/ubiquiti.conf https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Solutions/Ubiquiti/Data%20Connectors/la_agent_configs/ubiquiti.conf\n  - sudo sed -i -e ''s/workspace_id/''', parameters('WorkspaceId'), '''/g'' /etc/opt/microsoft/omsagent/', parameters('WorkspaceId'), '/conf/omsagent.d/ubiquiti.conf\n  - sudo sed -i -e ''s/22022/5514/g'' /etc/opt/microsoft/omsagent/', parameters('WorkspaceId'), '/conf/omsagent.d/ubiquiti.conf\n  - sudo systemctl restart rsyslog syslog\n  - sudo /opt/microsoft/omsagent/bin/service_control restart ', parameters('WorkspaceId')))]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "18.04-LTS",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS"
+                        },
+                        "diskSizeGB": 64
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic_Name'))]"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('vm_Name'),'/DAExtension')]",
+            "apiVersion": "2017-03-30",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', variables('vm_Name'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Azure.Monitoring.DependencyAgent",
+                "type": "DependencyAgentLinux",
+                "typeHandlerVersion": "9.5",
+                "autoUpgradeMinorVersion": true
+            }
+        }
+    ]
+}
