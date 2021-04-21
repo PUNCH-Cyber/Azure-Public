@@ -6,7 +6,7 @@
 		"config": {
             "isWizard": true,
             "basics": {
-                "description": "**Providence Secure Master Onboarding Template**\n\n**Description:** \nThis template is used to onboard new customers to the Providence Secure Managed Security Services platform and will guide engineers through the process. note that some section of this deployment may change as new connectors and integration are built to be supported by Providence Secure. To get started, complete the for on this page and click the next button at the bottom.\n\n**IMPORTANT:** \nThe first resource group needs to follow this naming convention, Customers name with no spaces followed by '-Sentinel'  (e.g. CustomerName-Sentinel)\nThe Customer Name field should follow the naming convention, Customers name with no spaces.",
+                "description": "**Master Onboarding Template**\n\n**Description:** \nThis template is used to onboard new customers to your Managed Security Services platform and will guide engineers through the process. note that some section of this deployment may change as new connectors and integration are built to be supported by Providence Secure. To get started, complete the for on this page and click the next button at the bottom.\n\n**IMPORTANT:** \nThe first resource group needs to follow this naming convention, Customers name with no spaces followed by '-Sentinel'  (e.g. CustomerName-Sentinel)\nThe Customer Name field should follow the naming convention, Customers name with no spaces.",
                 "location": {
                     "label": "Location",
                     "toolTip": "Location for all resources",
