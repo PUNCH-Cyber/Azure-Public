@@ -180,7 +180,7 @@
                         "privateKey": "[parameters('PrivateKey')]",
                         "timeInterval": "[parameters('TimeInterval')]",
                         "debug": "[parameters('Debug')]",
-                        "WEBSITE_RUN_FROM_PACKAGE": "https://github.com/PUNCH-Cyber/Azure/blob/master/Data%20Connectors/MongoDB%20Atlas/FunctionAppMongoDBAtlas.zip?raw=true"
+                        "WEBSITE_RUN_FROM_PACKAGE": "https://github.com/PUNCH-Cyber/Azure-Public/blob/main/Functions/MongoDB%20Atlas/FunctionAppMongoDBAtlas.zip?raw=true"
                     }
                 }
             ]
