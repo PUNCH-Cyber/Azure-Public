@@ -153,7 +153,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Lighthouse/ProvSecure-Base-Sentinel-Delegation.json')]",
+                    "uri": "[uri(variables('_artifactsLocation'), 'linkedTemplates/Lighthouse/ProvSecure-Base-Sentinel-Delegation.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -190,7 +190,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Lighthouse/ProvSecure-Contributor-Delegation.json')]",
+                    "uri": "[uri(variables('_artifactsLocation'), 'linkedTemplates/Lighthouse/ProvSecure-Contributor-Delegation.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -227,7 +227,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Lighthouse/ProvSecure-SecurityReaders-Delegation.json')]",
+                    "uri": "[uri(variables('_artifactsLocation'), 'linkedTemplates/Lighthouse/ProvSecure-SecurityReaders-Delegation.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -263,7 +263,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Senitnel/workspace.json')]",
+                    "uri": "[uri(variables('_artifactsLocation'), 'linkedTemplates/Senitnel/workspace.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -301,7 +301,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Syslog/Syslog-VMSS-ub-Template.json')]",
+                    "uri": "[uri(variables('_artifactsLocation'), 'linkedTemplates/Syslog/Syslog-VMSS-ub-Template.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -333,7 +333,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/CrowdStrike/DeployCrowdStrike.json')]",
+                    "uri": "[uri(variables('_artifactsLocation'), 'linkedTemplates/CrowdStrike/DeployCrowdStrike.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
