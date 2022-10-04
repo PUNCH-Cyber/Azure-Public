@@ -112,7 +112,7 @@
         "sentinelRGName": "[concat(parameters('customerName'), '-Sentinel')]",
         "ingestionRGName": "[concat(parameters('customerName'), '-Ingestion')]",
         "resourcesRGName": "[concat(parameters('customerName'), '-Resources')]",
-        "_artifactsLocation": "https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/MasterDeploymentPackage/",
+        "_artifactsLocation": "https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/MSSP-Testing/",
         "immediatePurgeDataOn30Days": true,
         "dataRetention": 30,
         "dailyQuota": 0,
@@ -153,7 +153,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Senitnel/ProvSecure-Base-Sentinel-Delegation.json')]",
+                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Lighthouse/ProvSecure-Base-Sentinel-Delegation.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -190,7 +190,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Senitnel/ProvSecure-Contributor-Delegation.json')]",
+                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Lighthouse/ProvSecure-Contributor-Delegation.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -227,7 +227,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Senitnel/ProvSecure-SecurityReaders-Delegation.json')]",
+                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Lighthouse/ProvSecure-SecurityReaders-Delegation.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
