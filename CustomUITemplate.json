@@ -1,0 +1,454 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+    "handler": "Microsoft.Azure.CreateUIDef",
+    "version": "0.1.2-preview",
+    "parameters": {
+		"config": {
+            "isWizard": true,
+            "basics": {
+                "description": "**Providence Secure - Master Onboarding Template**\n\n**Description:** \nThis template is used to onboard new customers to your Managed Security Services platform and will guide engineers through the process. note that some section of this deployment may change as new connectors and integration are built to be supported by Providence Secure. To get started, complete the for on this page and click the next button at the bottom.\n\n**IMPORTANT:** \nThe first resource group needs to follow this naming convention, Customers name with no spaces followed by '-Sentinel'  (e.g. CustomerName-Sentinel)\nThe Customer Name field should follow the naming convention, Customers name with no spaces.",
+                "location": {
+                    "label": "Location",
+                    "toolTip": "Location for all resources",
+                    "resourceTypes": [
+                        "Microsoft.OperationalInsights"
+                    ]
+                }
+            }
+        },
+        "basics": [
+            {
+                "name": "customerName",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Customer Name",
+                "placeholder": "MyCompany",
+                "defaultValue": "",
+                "toolTip": "The Customer name should include 4-63 letters, digits or '-'. The '-' shouldn't be the first or the last symbol.",
+                "constraints": {
+                    "required": true,
+                    "regex": "^[a-z0-9A-Z- ]{1,30}$",
+                    "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                },
+                "visible": true
+            }
+        ],
+        "steps": [
+            {
+                "name": "lighthouse",
+                "label": "Lighthouse Delegations",
+                "elements": [
+                    {
+                        "name": "deployDelegations",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Deploy Lighthouse Delegations?",
+                        "toolTip": "",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Please select"
+                        },
+                        "visible": true
+                    },
+					{
+                        "name": "textBlock3",
+                        "type": "Microsoft.Common.TextBlock",
+                        "options": {
+                            "text": "Service Provider Details:"
+                        },
+                        "visible": "[if(steps('lighthouse').deployDelegations, true, false)]"
+                    },
+					{
+                        "name": "ProviderName",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Provider Name",
+                        "defaultValue": "Providence Secure",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[a-z0-9A-Z- ]{1,30}$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "toolTip": "This is the Tenant ID for the managed service provider",
+                        "visible": "[if(steps('lighthouse').deployDelegations, true, false)]"
+                    },
+                    {
+                        "name": "ProviderTenatID",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Tenant ID",
+                        "defaultValue": "7523c0fe-725c-48d3-a048-cc139f652f10",
+                        "constraints": {
+                            "required": false,
+                            "regex": "[a-z0-9A-Z-]",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "toolTip": "This is the Tenant ID for the managed service provider",
+                        "visible": "[if(steps('lighthouse').deployDelegations, true, false)]"
+                    },
+                    {
+                        "name": "LHBasicGroupID",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Reader Access Group GUID",
+                        "defaultValue": "d04cf36c-5fec-4036-a676-2010610f8c7c",
+                        "constraints": {
+                            "required": false,
+                            "regex": "[a-z0-9A-Z-]",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "toolTip": "This is the Tenant ID for the managed service provider",
+                        "visible": "[if(steps('lighthouse').deployDelegations, true, false)]"
+                    },
+                    {
+                        "name": "LHReaderGroupID",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Security Reader Access Group GUID",
+                        "defaultValue": "89760b10-7451-4ae8-9205-8679464970b2",
+                        "constraints": {
+                            "required": false,
+                            "regex": "[a-z0-9A-Z-]",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "toolTip": "This is the Tenant ID for the managed service provider",
+                        "visible": "[if(steps('lighthouse').deployDelegations, true, false)]"
+                    },
+                    {
+                        "name": "LHResponderGroupID",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Security Responder Access Group GUID",
+                        "defaultValue": "a6cc5930-da69-4fb2-9946-2f0e6d7b21cf",
+                        "constraints": {
+                            "required": false,
+                            "regex": "[a-z0-9A-Z-]",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "toolTip": "This is the Tenant ID for the managed service provider",
+                        "visible": "[if(steps('lighthouse').deployDelegations, true, false)]"
+                    },
+                    {
+                        "name": "LHContributorGroupID",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Security Contributor Access Group GUID",
+                        "defaultValue": "a5e7b42e-73c2-477a-9fda-afa4e8ee9c8c",
+                        "constraints": {
+                            "required": false,
+                            "regex": "[a-z0-9A-Z-]",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "toolTip": "This is the Tenant ID for the managed service provider",
+                        "visible": "[if(steps('lighthouse').deployDelegations, true, false)]"
+                    },
+                    {
+                        "name": "LHAdminGroupID",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Security Security Admin Access Group GUID",
+                        "defaultValue": "a5e7b42e-73c2-477a-9fda-afa4e8ee9c8c",
+                        "constraints": {
+                            "required": false,
+                            "regex": "[a-z0-9A-Z-]",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "toolTip": "This is the Tenant ID for the managed service provider",
+                        "visible": "[if(steps('lighthouse').deployDelegations, true, false)]"
+                    }
+				]
+			},
+            {
+                "name": "logforwarders",
+                "label": "Log Forwarders",
+                "elements": [
+					{
+                        "name": "textBlock3",
+                        "type": "Microsoft.Common.TextBlock",
+                        "visible": true,
+                        "options": {
+                            "text": "Virtual Machine deployment information:"
+                        }
+                    },
+                    {
+                        "name": "VMAdminUserName",
+                        "type": "Microsoft.Compute.UserNameTextBox",
+                        "label": "VM Admin UserName",
+                        "defaultValue": "VM-Admin",
+						"osPlatform": "Linux",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[a-z0-9A-Z-]{1,30}$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "toolTip": "This is the Username for the VM(SS) deployment",
+                        "visible": true
+                    },
+                    {
+                        "name": "VMAdminPassword",
+                        "type": "Microsoft.Common.PasswordBox",
+                        "label": {
+                            "password": "VM Admin Password",
+                            "confirmPassword": "Confirm password"
+                        },
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[a-zA-Z0-9!@#$%&]{11,40}$",
+                            "validationMessage": "Password must be at least 8 - 40 characters long, contain only numbers, letters and special characters"
+                        },
+                        "toolTip": "This is the Password for the VM(SS) deployment",
+                        "visible": true
+                    }
+				]
+			},
+            {
+                "name": "crowdstrike",
+                "label": "CrowdStrike EDR",
+                "elements": [
+					{
+                        "name": "textBlock3",
+                        "type": "Microsoft.Common.TextBlock",
+                        "options": {
+                            "text": "Virtual Machine deployment information:"
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "CSVMAdminUserName",
+                        "type": "Microsoft.Compute.UserNameTextBox",
+                        "label": "VM Admin UserName",
+                        "defaultValue": "CS-Admin",
+						"osPlatform": "Linux",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[a-z0-9A-Z-]{1,30}$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "toolTip": "This is the Username for the CrowdStrike VM deployment",
+                        "visible": true
+                    },
+                    {
+                        "name": "CSVMAdminPassword",
+                        "type": "Microsoft.Common.PasswordBox",
+                        "label": {
+                            "password": "VM Admin Password",
+                            "confirmPassword": "Confirm password"
+                        },
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[a-zA-Z0-9!@#$%&]{11,40}$",
+                            "validationMessage": "Password must be at least 8 - 40 characters long, contain only numbers, letters and special characters"
+                        },
+                        "toolTip": "This is the Username for the CrowdStrike VM deployment",
+                        "visible": true
+                    },
+					{
+                        "name": "textBlock4",
+                        "type": "Microsoft.Common.TextBlock",
+                        "options": {
+                            "text": "CrowdStrike API Information:"
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "crowdstrikeClientID",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "CrowdStrike API Client ID",
+                        "placeholder": "",
+                        "defaultValue": "",
+                        "toolTip": "This is from the CS 'API and Integrations' menu within CS.",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "crowdstrikeClientKey",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "CrowdStrike API Client Key",
+                        "placeholder": "",
+                        "defaultValue": "",
+                        "toolTip": "This is the password for the Qualys account",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "visible": true
+                    }
+				]
+			},
+            {
+                "name": "contentRepo",
+                "label": "Provider Repo Connection",
+                "elements": [
+					{
+                        "name": "textBlock3",
+                        "type": "Microsoft.Common.TextBlock",
+                        "options": {
+                            "text": "Content Repoository Connection Information:"
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "repoConnectionName",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Name",
+                        "placeholder": "Provider Repo - Main",
+                        "defaultValue": "",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "repoOrg",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Organization Name",
+                        "placeholder": "ProvidenceSecure",
+                        "defaultValue": "",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "repoProjectName",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Project Name",
+                        "placeholder": "Sentinel CICD",
+                        "defaultValue": "",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "repoName",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Repoository Name",
+                        "placeholder": "Sentinel CICD",
+                        "defaultValue": "",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "repoBranch",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Branch",
+                        "placeholder": "main",
+                        "defaultValue": "",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+                            "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                        },
+                        "visible": true
+                    },
+					{
+                        "name": "textBlock4",
+                        "type": "Microsoft.Common.TextBlock",
+                        "options": {
+                            "text": ""
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "textBlock5",
+                        "type": "Microsoft.Common.TextBlock",
+                        "options": {
+                            "text": "Select Content Types:"
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "repoAnalytic",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Analytics rule",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Please select"
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "repoAutomation",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Automation rules",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Please select"
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "repoParsers",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Parsers",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Please select"
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "repoPlaybooks",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Playbooks",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Please select"
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "repoWorkbooks",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Workbooks",
+                        "constraints": {
+                            "required": false,
+                            "validationMessage": "Please select"
+                        },
+                        "visible": true
+                    }
+				]
+			}
+        ],
+        "outputs": {
+            "customerName": "[basics('customerName')]",
+            "location": "[location()]",
+
+            "deployDelegations": "[steps('lighthouse').deployDelegations]",
+            "ProviderName": "[steps('lighthouse').ProviderName]",
+            "ProviderTenatID":  "[steps('lighthouse').ProviderTenatID]",
+            "LHBasicGroupID": "[steps('lighthouse').LHBasicGroupID]",
+            "LHReaderGroupID": "[steps('lighthouse').LHReaderGroupID]",
+            "LHResponderGroupID": "[steps('lighthouse').LHResponderGroupID]",
+            "LHContributorGroupID": "[steps('lighthouse').LHContributorGroupID]",
+            "LHAdminGroupID": "[steps('lighthouse').LHAdminGroupID]",
+
+            "VMAdminUserName": "[steps('logforwarders').VMAdminUserName]",
+            "VMAdminPassword": "[steps('logforwarders').VMAdminPassword]",
+
+            "CSVMAdminUserName": "[steps('crowdstrike').CSVMAdminUserName]",
+            "CSVMAdminPassword": "[steps('crowdstrike').CSVMAdminPassword]",
+            "CSAPIID": "[steps('crowdstrike').crowdstrikeClientID]",
+            "CSAPIKEY": "[steps('crowdstrike').crowdstrikeClientKey]",
+
+            "repoConnectionName": "[steps('contentRepo').repoConnectionName]",
+            "repoOrg": "[steps('contentRepo').repoOrg]",
+            "repoProjectName": "[steps('contentRepo').repoProjectName]",
+            "repoName": "[steps('contentRepo').repoName]",
+            "repoBranch": "[steps('contentRepo').repoBranch]",
+            "repoAnalytic": "[steps('contentRepo').repoAnalytic]",
+            "repoAutomation": "[steps('contentRepo').repoAutomation]",
+            "repoParsers": "[steps('contentRepo').repoParsers]",
+            "repoPlaybooks": "[steps('contentRepo').repoPlaybooks]",
+            "repoWorkbooks": "[steps('contentRepo').repoWorkbooks]"
+
+        }
+    }
+}

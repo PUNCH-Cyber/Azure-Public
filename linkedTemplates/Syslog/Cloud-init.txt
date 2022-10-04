@@ -1,0 +1,13 @@
+#cloud-config
+runcmd:
+  - sudo apt update && apt upgrade -y
+  - sudo echo \"root         soft    nofile         65536\" >> /etc/security/limits.conf
+  - sudo echo \"root         hard    nofile         65536\" >> /etc/security/limits.conf
+  - sudo echo \"*         soft    nofile         65536\" >> /etc/security/limits.conf
+  - sudo echo \"*         hard    nofile         65536\" >> /etc/security/limits.conf
+  - sudo wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w <WORKSPACEID> -s <WORKSPACEKEY>
+  - sudo wget -O TimeGenerated.py https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/DataConnectors/CEF/TimeGenerated.py && python TimeGenerated.py <WORKSPACEID>
+  - sudo wget -O /etc/rsyslog.d/sentinel.conf https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/Syslog-VMSS/sentinel.conf
+  - sudo wget -O /etc/opt/microsoft/omsagent/<WORKSPACEID>/conf/omsagent.d/security_events.conf https://raw.githubusercontent.com/PUNCH-Cyber/Azure-Public/main/Syslog-VMSS/security_events.conf
+  - sudo systemctl restart rsyslog syslog
+  - sudo /opt/microsoft/omsagent/bin/service_control restart omsagent-<WORKSPACEID>.service

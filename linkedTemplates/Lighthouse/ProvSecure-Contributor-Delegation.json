@@ -1,0 +1,141 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "mspOfferName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specify a unique name for your offer"
+            },
+            "defaultValue": "Providence Secure MSSP - Contributor Delegation"
+        },
+        "mspOfferDescription": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Managed Service Provider offering"
+            },
+            "defaultValue": "This is a contributor delegation providing delegated access to security solutions in Azure resources"
+        },
+        "managedByTenantId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specify the tenant id of the Managed Service Provider"
+            },
+            "defaultValue": "7523c0fe-725c-48d3-a048-cc139f652f10"
+        },
+        "authorizations": {
+            "type": "array",
+            "metadata": {
+                "description": "Specify an array of objects, containing tuples of Azure Active Directory principalId, a Azure roleDefinitionId, and an optional principalIdDisplayName. The roleDefinition specified is granted to the principalId in the provider's Active Directory and the principalIdDisplayName is visible to customers."
+            },
+            "defaultValue": [
+                { 
+                    "principalId": "d04cf36c-5fec-4036-a676-2010610f8c7c", 
+                    "roleDefinitionId": "acdd72a7-3385-48ef-bd42-f606fba81ae7",
+                    "principalIdDisplayName": "Lighthouse Basic Access" 
+                }, 
+                { 
+                    "principalId": "d04cf36c-5fec-4036-a676-2010610f8c7c", 
+                    "roleDefinitionId": "91c1777a-f3dc-4fae-b103-61d183457e46",
+                    "principalIdDisplayName": "Lighthouse Basic Access" 
+                },
+                { 
+                    "principalId": "d04cf36c-5fec-4036-a676-2010610f8c7c", 
+                    "roleDefinitionId": "8d289c81-5878-46d4-8554-54e1e3d8b5cb",
+                    "principalIdDisplayName": "Lighthouse Basic Access" 
+                },
+                {	
+                    "principalId": "d04cf36c-5fec-4036-a676-2010610f8c7c",		
+                    "roleDefinitionId": "39bc4728-0917-49c7-9d2c-d95423bc2eb4",
+                    "principalIdDisplayName": "Lighthouse Basic Access"
+                }
+            ]
+        },
+        "eligibleAuthorizations": {
+            "type": "array",
+            "metadata": {
+                "description": "Pre-defined security roles for managing Sentinel resources"
+            },
+            "defaultValue": [ 	
+                {
+                    "justInTimeAccessPolicy": { 
+                        "multiFactorAuthProvider": "Azure", 
+                        "maximumActivationDuration": "PT8H" 
+                    },	
+                    "principalId": "a5e7b42e-73c2-477a-9fda-afa4e8ee9c8c",	
+                    "principalIdDisplayName": "MSSP Security Admins",	
+                    "roleDefinitionId": "b24988ac-6180-42a0-ab88-20f7382dd24c"
+                }
+            ]    
+        },
+        "resourceGroups": {
+            "type": "array",
+            "metadata": {
+                "description": "Note: resource groups must already exist in tenant"
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ManagedServices/registrationDefinitions",
+            "apiVersion": "2020-02-01-preview",
+            "name": "[guid(parameters('resourceGroups')[copyIndex()].rgName)]",
+            "properties": {
+                "registrationDefinitionName": "[parameters('mspOfferName')]",
+                "description": "[parameters('mspOfferDescription')]",
+                "managedByTenantId": "[parameters('managedByTenantId')]",
+                "authorizations": "[parameters('authorizations')]",
+                "eligibleAuthorizations": "[parameters('eligibleAuthorizations')]"
+            },
+            "copy": {
+                "name": "deploymentCopy",
+                "count": "[length(parameters('resourceGroups'))]"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "[concat('rgAssignment', copyIndex())]",
+            "resourceGroup": "[parameters('resourceGroups')[copyIndex()].rgName]",
+            "copy": {
+                "name": "deploymentCopy",
+                "count": "[length(parameters('resourceGroups'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', guid(parameters('resourceGroups')[copyIndex()].rgName))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.ManagedServices/registrationAssignments",
+                            "apiVersion": "2020-02-01-preview",
+                            "name": "[guid(parameters('resourceGroups')[copyIndex()].rgName)]",
+                            "properties": {
+                                "registrationDefinitionId": "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', guid(parameters('resourceGroups')[copyIndex()].rgName))]"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "mspOfferName": {
+            "type": "string",
+            "value": "[concat('Managed by', ' ', parameters('mspOfferName'))]"
+        },
+        "authorizations": {
+            "type": "array",
+            "value": "[parameters('authorizations')]"
+        },
+        "eligibleAuthorizations": {
+            "type": "array",
+            "value": "[parameters('eligibleAuthorizations')]"
+        }
+    }
+}
