@@ -343,10 +343,10 @@
                     "location": {
                         "value": "[parameters('location')]"
                     },
-                    "CSVMAdminUserName": {
+                    "VMAdminUserName": {
                             "value": "[parameters('CSVMAdminUserName')]"
                     },
-                    "CSVMAdminPassword": {
+                    "VMAdminPassword": {
                             "value": "[parameters('CSVMAdminPassword')]"
                     },
                     "crowdstrikeId": {
