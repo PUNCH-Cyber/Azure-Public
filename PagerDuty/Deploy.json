@@ -15,7 +15,7 @@
             "type": "string"
         },
         "TenantName": {
-            "defaultValue": "example: Embassy Trinity",
+            "defaultValue": "example: Punch Cyber",
             "type": "string"
         },
         "PagerDuty_REST_ID": {
@@ -121,7 +121,7 @@
                             "type": "ApiConnection",
                             "inputs": {
                                 "body": {
-                                    "description": "New \"@{body('Get_incident_from_Sentinel')?['properties']?['title']}\" incident in Truveta Corp Sentinel (Incident ID: @{body('Get_incident_from_Sentinel')?['properties']?['incidentNumber']})",
+                                    "description": "New \"@{body('Get_incident_from_Sentinel')?['properties']?['title']}\" incident in Sentinel (Incident ID: @{body('Get_incident_from_Sentinel')?['properties']?['incidentNumber']})",
                                     "service_key": "[parameters('PagerDuty_Service_Key')]"
                                 },
                                 "host": {
