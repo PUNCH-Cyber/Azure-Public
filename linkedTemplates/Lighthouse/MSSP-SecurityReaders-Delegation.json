@@ -7,7 +7,7 @@
             "metadata": {
                 "description": "Specify a unique name for your offer"
             },
-            "defaultValue": "Providence Secure MSSP - Contributor Delegation"
+            "defaultValue": "MSSP - Contributor Delegation"
         },
         "mspOfferDescription": {
             "type": "string",
@@ -21,7 +21,7 @@
             "metadata": {
                 "description": "Specify the tenant id of the Managed Service Provider"
             },
-            "defaultValue": "7523c0fe-725c-48d3-a048-cc139f652f10"
+            "defaultValue": "Provider Tenant GUID"
         },
         "authorizations": {
             "type": "array",
@@ -30,17 +30,17 @@
             },
             "defaultValue": [
                 { 
-                    "principalId": "d04cf36c-5fec-4036-a676-2010610f8c7c", 
+                    "principalId": "Lighthouse Basic Access GUID", 
                     "roleDefinitionId": "acdd72a7-3385-48ef-bd42-f606fba81ae7",
                     "principalIdDisplayName": "Lighthouse Basic Access" 
                 }, 
                 { 
-                    "principalId": "d04cf36c-5fec-4036-a676-2010610f8c7c", 
+                    "principalId": "Lighthouse Basic Access GUID", 
                     "roleDefinitionId": "91c1777a-f3dc-4fae-b103-61d183457e46",
                     "principalIdDisplayName": "Lighthouse Basic Access" 
                 },
                 {	
-                    "principalId": "d04cf36c-5fec-4036-a676-2010610f8c7c",		
+                    "principalId": "Lighthouse Basic Access GUID",		
                     "roleDefinitionId": "39bc4728-0917-49c7-9d2c-d95423bc2eb4",
                     "principalIdDisplayName": "Lighthouse Basic Access"
                 }
