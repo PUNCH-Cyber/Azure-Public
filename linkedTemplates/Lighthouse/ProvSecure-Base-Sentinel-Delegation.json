@@ -7,7 +7,7 @@
             "metadata": {
                 "description": "Specify a unique name for your offer"
             },
-            "defaultValue": "Providence Secure MSSP - Base Sentinel Delegation"
+            "defaultValue": "MSSP - Base Sentinel Delegation"
         },
         "mspOfferDescription": {
             "type": "string",
@@ -21,7 +21,7 @@
             "metadata": {
                 "description": "Specify the tenant id of the Managed Service Provider"
             },
-            "defaultValue": "7523c0fe-725c-48d3-a048-cc139f652f10"
+            "defaultValue": "Provider Tenant GUID"
         },
         "authorizations": {
             "type": "array",
@@ -30,22 +30,22 @@
             },
             "defaultValue": [
                 { 
-                    "principalId": "d04cf36c-5fec-4036-a676-2010610f8c7c", 
+                    "principalId": "Lighthouse Basic Access GUID", 
                     "roleDefinitionId": "acdd72a7-3385-48ef-bd42-f606fba81ae7",
                     "principalIdDisplayName": "Lighthouse Basic Access" 
                 }, 
                 { 
-                    "principalId": "d04cf36c-5fec-4036-a676-2010610f8c7c", 
+                    "principalId": "Lighthouse Basic Access GUID", 
                     "roleDefinitionId": "91c1777a-f3dc-4fae-b103-61d183457e46",
                     "principalIdDisplayName": "Lighthouse Basic Access" 
                 },
                 { 
-                    "principalId": "d04cf36c-5fec-4036-a676-2010610f8c7c", 
+                    "principalId": "Lighthouse Basic Access GUID", 
                     "roleDefinitionId": "8d289c81-5878-46d4-8554-54e1e3d8b5cb",
                     "principalIdDisplayName": "Lighthouse Basic Access" 
                 },
                 {	
-                    "principalId": "d04cf36c-5fec-4036-a676-2010610f8c7c",		
+                    "principalId": "Lighthouse Basic Access GUID",		
                     "roleDefinitionId": "39bc4728-0917-49c7-9d2c-d95423bc2eb4",
                     "principalIdDisplayName": "Lighthouse Basic Access"
                 }
@@ -62,7 +62,7 @@
                         "multiFactorAuthProvider": "Azure", 
                         "maximumActivationDuration": "PT8H" 
                     },	
-                    "principalId": "a5e7b42e-73c2-477a-9fda-afa4e8ee9c8c",	
+                    "principalId": "MSSP Security Admins GUID",	
                     "principalIdDisplayName": "MSSP Security Admins",	
                     "roleDefinitionId": "ab8e14d6-4a74-4a29-9ba8-549422addade"
 
@@ -72,7 +72,7 @@
                         "multiFactorAuthProvider": "Azure", 
                         "maximumActivationDuration": "PT8H" 
                     },	
-                    "principalId": "a5e7b42e-73c2-477a-9fda-afa4e8ee9c8c",	
+                    "principalId": "MSSP Security Admins GUID",	
                     "principalIdDisplayName": "MSSP Security Admins",	
                     "roleDefinitionId": "92aaf0da-9dab-42b6-94a3-d43ce8d16293"
 
@@ -82,7 +82,7 @@
                         "multiFactorAuthProvider": "Azure", 
                         "maximumActivationDuration": "PT8H" 
                     },	
-                    "principalId": "a5e7b42e-73c2-477a-9fda-afa4e8ee9c8c",	
+                    "principalId": "MSSP Security Admins GUID",	
                     "principalIdDisplayName": "MSSP Security Admins",	
                     "roleDefinitionId": "87a39d53-fc1b-424a-814c-f7e04687dc9e"
 
@@ -92,7 +92,7 @@
                         "multiFactorAuthProvider": "Azure", 
                         "maximumActivationDuration": "PT8H" 
                     },	
-                    "principalId": "a6cc5930-da69-4fb2-9946-2f0e6d7b21cf",	
+                    "principalId": "MSSP Security Responders GUID",	
                     "principalIdDisplayName": "MSSP Security Responders",	
                     "roleDefinitionId": "ab8e14d6-4a74-4a29-9ba8-549422addade"
 
@@ -102,7 +102,7 @@
                         "multiFactorAuthProvider": "Azure", 
                         "maximumActivationDuration": "PT8H" 
                     },	
-                    "principalId": "a6cc5930-da69-4fb2-9946-2f0e6d7b21cf",	
+                    "principalId": "MSSP Security Responders GUID",	
                     "principalIdDisplayName": "MSSP Security Responders",	
                     "roleDefinitionId": "87a39d53-fc1b-424a-814c-f7e04687dc9e"
 
@@ -112,7 +112,7 @@
                         "multiFactorAuthProvider": "Azure", 
                         "maximumActivationDuration": "PT8H" 
                     },	
-                    "principalId": "89760b10-7451-4ae8-9205-8679464970b2",	
+                    "principalId": "MSSP Security Readers GUID",	
                     "principalIdDisplayName": "MSSP Security Readers",	
                     "roleDefinitionId": "3e150937-b8fe-4cfb-8069-0eaf05ecd056"
 
