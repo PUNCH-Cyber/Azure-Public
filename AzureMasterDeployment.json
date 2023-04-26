@@ -153,7 +153,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Senitnel/ProvSecure-Base-Sentinel-Delegation.json')]",
+                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Senitnel/MSSP-Base-Sentinel-Delegation.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -190,7 +190,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Senitnel/ProvSecure-Contributor-Delegation.json')]",
+                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Senitnel/MSSP-Contributor-Delegation.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -227,7 +227,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Senitnel/ProvSecure-SecurityReaders-Delegation.json')]",
+                    "uri": "[uri(variables('_artifactsLocation'), 'LinkedTemplates/Senitnel/MSSP-SecurityReaders-Delegation.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
